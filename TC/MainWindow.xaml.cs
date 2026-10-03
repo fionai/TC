@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Numerics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Numerics;
+using System.Windows.Input;
 
 namespace TC
 {
@@ -58,7 +59,7 @@ namespace TC
 
 			if (MainTabControl != null) MainTabControl.SelectedIndex = 0;
 			if (FromUnit != null) FromUnit.SelectedIndex = 1; // Выбираем "Минуты" по умолчанию
-			
+
 		}
 
 		// 1. Клик по кнопке-гамбургеру открывает всплывающее меню под ней
@@ -79,7 +80,7 @@ namespace TC
 			}
 		}
 
-		private void CloseMenuOnOutsideClick (object sender, System.Windows.Input.MouseButtonEventArgs e)
+		private void CloseMenuOnOutsideClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			if (MenuPopup != null && !HamburgerButton.IsMouseOver && !MenuPopup.IsMouseOver)
 			{
@@ -206,7 +207,7 @@ namespace TC
 				if (fullEnd < fullStart)
 				{
 					DateTime tmp = fullEnd;
-					fullEnd = fullStart; 
+					fullEnd = fullStart;
 					fullStart = tmp;
 				}
 
@@ -344,7 +345,6 @@ namespace TC
 			}
 		}
 
-
 		// Метод сброса полей в дефолтное состояние
 		private void ResetConverterFields()
 		{
@@ -385,7 +385,7 @@ namespace TC
 					var watermarkControl = dtb.Template.FindName("PART_Watermark", dtb) as ContentControl;
 					if (watermarkControl != null)
 					{
-						// Заменяем стандартный текст "Выбор даты" на наш
+						// Заменяем стандартный text "Выбор даты" на наш
 						watermarkControl.Content = "Дата";
 
 						// === ИЗМЕНЕНИЕ ЦВЕТА ПОДСКАЗКИ ===
@@ -394,10 +394,7 @@ namespace TC
 					}
 				};
 			}
-		} // Скобка закрытия метода добавлена, так как в вашем фрагменте её не было
-
-
-		
+		}
 
 		// Вызывается каждый раз, когда открывается (активируется) вкладка 4
 		private void IntervalTab_Loaded(object sender, RoutedEventArgs e)
@@ -432,7 +429,7 @@ namespace TC
 			long inputSeconds = GetInputIntervalInSeconds();
 			currentTotalSeconds -= inputSeconds;
 
-			// Защита от отрицательного времени (если нужно уйти в минус, просто удалите это условие)
+			// Защита от отрицательного времени
 			if (currentTotalSeconds < 0) currentTotalSeconds = 0;
 
 			UpdateIntervalResultText();
@@ -510,21 +507,194 @@ namespace TC
 			}
 		}
 
-		// Блокируем нажатие любых клавиш, кроме цифр от 0 до 9
-		private void InputValue_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+		// Обработчик ввода для поля Конвертера (разрешает только цифры и одну запятую/точку)
+		private void InputValue_PreviewTextInput(object sender, TextCompositionEventArgs e)
 		{
-			if (e.Text.Length > 0 && !char.IsDigit(e.Text, e.Text.Length - 1))
+			if (sender is TextBox textBox)
 			{
-				e.Handled = true; // Блокируем буквы и знаки
+				// Разрешаем цифры
+				if (char.IsDigit(e.Text[0])) return;
+
+				// Разрешаем одну точку или запятую для дробных чисел
+				if ((e.Text == "." || e.Text == ",") && !textBox.Text.Contains(".") && !textBox.Text.Contains(","))
+				{
+					return;
+				}
+
+				// Блокируем всё остальное
+				e.Handled = true;
 			}
 		}
 
-		private void InputValue_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+		// Обработчик клавиш для поля Конвертера (если он прописан в XAML)
+		private void InputValue_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Key == System.Windows.Input.Key.Enter)
+			// Разрешаем системные клавиши (Backspace, Delete, стрелки)
+			if (e.Key == Key.Back || e.Key == Key.Delete || e.Key == Key.Left || e.Key == Key.Right)
 			{
-				e.Handled = true; // Блокируем перенос строки
+				return;
 			}
 		}
-	}
-}
+
+
+		// =========================================================================
+		// ЛОГИКА МАСКИ ВРЕМЕНИ ДЛЯ ПОЛЕЙ ВВОДА В КАРТОЧКЕ (ЧЧ:ММ:СС)
+		// =========================================================================
+
+		private const string Mask = "__:__:__";
+		private const string Watermark = "Время";
+
+		// 1. ПОЛУЧЕНИЕ ФОКУСА: При переходе через Tab ставим курсор в самое начало (0 индекс)
+		private void TimeTextBox_GotFocus(object sender, RoutedEventArgs e)
+		{
+			if (sender is TextBox textBox)
+			{
+				if (textBox.Text == Watermark)
+				{
+					textBox.Text = Mask;
+				}
+				textBox.CaretIndex = 0;
+			}
+		}
+
+		// 2. ПОТЕРЯ ФОКУСА: Если поле пустое — возвращаем слово "Время", иначе нормализуем нулями
+		private void TimeTextBox_LostFocus(object sender, RoutedEventArgs e)
+		{
+			if (sender is TextBox textBox)
+			{
+				if (string.IsNullOrWhiteSpace(textBox.Text) || textBox.Text == Mask || IsMaskEmpty(textBox.Text))
+				{
+					textBox.Text = Watermark;
+				}
+				else
+				{
+					NormalizeAndFillZeros(textBox);
+				}
+			}
+		}
+
+		// Клик мыши: если поле пустое, курсор сбрасывается в начало, если заполнено — встает туда, куда кликнули
+		private void TimeTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			if (sender is TextBox textBox)
+			{
+				if (!textBox.IsFocused)
+				{
+					if (textBox.Text == Watermark || textBox.Text == Mask || IsMaskEmpty(textBox.Text))
+					{
+						textBox.Focus();
+						textBox.CaretIndex = 0;
+						e.Handled = true;
+					}
+				}
+			}
+		}
+
+		// 3. СЛУЖЕБНЫЕ КНОПКИ: Enter дополняет нулями. Delete/Backspace сбрасывают всё в маску при полном выделении.
+		private void TimeTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+		{
+			if (!(sender is TextBox textBox)) return;
+
+			if (e.Key == Key.Enter)
+			{
+				NormalizeAndFillZeros(textBox);
+				e.Handled = true;
+				return;
+			}
+
+			if (e.Key == Key.Delete || e.Key == Key.Back)
+			{
+				if (textBox.SelectedText == textBox.Text)
+				{
+					textBox.Text = Mask;
+					textBox.CaretIndex = 0;
+					e.Handled = true;
+					return;
+				}
+			}
+		}
+
+		// 4. ВВОД ЦИФР: Валидация диапазонов на лету (Часы 0-23, Минуты/Секунды 0-59)
+		private void TimeTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			if (!(sender is TextBox textBox)) return;
+
+			// ИСПРАВЛЕНО: Берем первый символ строки [0] для IsDigit
+			if (string.IsNullOrEmpty(e.Text) || !char.IsDigit(e.Text[0]))
+			{
+				e.Handled = true;
+				return;
+			}
+
+			int caret = textBox.CaretIndex;
+			if (caret >= 8)
+			{
+				e.Handled = true;
+				return;
+			}
+
+			if (caret == 2 || caret == 5)
+			{
+				caret++;
+				textBox.CaretIndex = caret;
+			}
+
+			// ИСПРАВЛЕНО: Берем символ по индексу [0]
+			char inputChar = e.Text[0];
+			char[] textChars = textBox.Text.PadRight(8, '_').ToCharArray();
+
+			// Проверка корректности диапазонов времени
+			if (caret == 0 && inputChar > '2') { e.Handled = true; return; }
+			if (caret == 1 && textChars[0] == '2' && inputChar > '3') { e.Handled = true; return; }
+			if ((caret == 3 || caret == 6) && inputChar > '5') { e.Handled = true; return; }
+
+			textChars[caret] = inputChar;
+			string newText = new string(textChars);
+
+			textBox.Text = newText;
+			textBox.CaretIndex = caret + 1;
+			e.Handled = true;
+		}
+
+		// 5. ДВОЙНОЙ КЛИК: Выделение всего значения целиком
+		private void TimeTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			if (sender is TextBox textBox)
+			{
+				if (textBox.Text != Watermark && textBox.Text != Mask && !IsMaskEmpty(textBox.Text))
+				{
+					textBox.SelectAll();
+				}
+			}
+		}
+
+		// Вспомогательные функции форматирования
+		private bool IsMaskEmpty(string text)
+		{
+			return !System.Text.RegularExpressions.Regex.IsMatch(text, @"\d");
+		}
+
+		private string FormatSegment(string segment)
+		{
+			if (segment == "__" || segment.Replace("_", "").Length == 0) return "00";
+			string clean = segment.Replace("_", "");
+			if (clean.Length == 1) return "0" + clean;
+			return clean;
+		}
+
+		private void NormalizeAndFillZeros(TextBox textBox)
+		{
+			if (textBox.Text == Watermark || textBox.Text == Mask) return;
+
+			string[] parts = textBox.Text.Split(':');
+			if (parts.Length != 3) return;
+
+			for (int i = 0; i < 3; i++)
+			{
+				parts[i] = FormatSegment(parts[i]);
+			}
+
+			textBox.Text = string.Format("{0}:{1}:{2}", parts[0], parts[1], parts[2]);
+		}
+	} // Конец класса MainWindow
+} // Конец пространства имен TC

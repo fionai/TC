@@ -32,18 +32,18 @@
 		<!-- Верхняя панель навигации -->
 		<Grid Grid.Row="0" Background="#E3DDD3" KeyboardNavigation.TabNavigation="None">
 			<Grid.ColumnDefinitions>
-				<!-- Левая колонка строго под кнопку ☰ -->
+				<!-- Левая колонка под кнопку ☰ -->
 				<ColumnDefinition Width="45"/>
 				<!-- Правая колонка под горизонтальные закладки -->
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 
-			<!-- 1. Кнопка-Гамбургер (слева сверху) -->
+			<!-- 1. Кнопка-Гамбургер -->
 			<Button Grid.Column="0" x:Name="HamburgerButton" Content="☰" FontSize="20" Width="45" Height="45" Background="Transparent" BorderThickness="0" Click="MenuButton_Click" IsTabStop="False"/>
 
-			<!-- 2. Выпадающее дублирующее меню -->
+			<!-- 2. Выпадающее меню -->
 			<Popup x:Name="MenuPopup" PlacementTarget="{Binding ElementName=HamburgerButton}" Placement="Bottom" StaysOpen="True">
-				<Border Background="#F3EFE9" BorderBrush="Gray" BorderThickness="1" Width="160">
+				<Border Background="#F3EFE9" BorderBrush="Gray" BorderThickness="1" Width="190">
 					<ListBox x:Name="MenuListBox" Background="Transparent" BorderThickness="0" SelectionChanged="MenuListBox_SelectionChanged" IsTabStop="False">
 						<ListBox.ItemContainerStyle>
 							<Style TargetType="ListBoxItem">
@@ -70,7 +70,7 @@
 						</ListBox.ItemContainerStyle>
 
 						<!-- Пункты меню (всегда своего цвета) -->
-						<ListBoxItem Content="📅 Разность дат" Background="#4E464B" Foreground="#FFFFFF"/>
+						<ListBoxItem Content="📅 Разность дат и времени" Background="#4E464B" Foreground="#FFFFFF"/>
 						<ListBoxItem Content="⏳ Вкладка 2" Background="#91BCB6" Foreground="#2E4A46"/>
 						<ListBoxItem Content="🔄 Конвертер" Background="#F9EFC7" Foreground="#5B4F23"/>
 						<ListBoxItem Content="📁 Интервалы" Background="#F5B66C" Foreground="#5C360C"/>
@@ -126,7 +126,7 @@
 				</ListBox.ItemContainerStyle>
 
 				<!-- вкладки -->
-				<ListBoxItem Content="Разность дат" Background="#4E464B" Foreground="#FFFFFF"/>
+				<ListBoxItem Content="Разность" Background="#4E464B" Foreground="#FFFFFF"/>
 				<ListBoxItem Content="Вкладка 2" Background="#91BCB6" Foreground="#2E4A46"/>
 				<ListBoxItem Content="Конвертер" Background="#F9EFC7" Foreground="#5B4F23"/>
 				<ListBoxItem Content="Интервалы" Background="#F5B66C" Foreground="#5C360C"/>
@@ -165,7 +165,7 @@
 
 								<!-- Заголовок вкладки -->
 								<TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
-                           Text="Вычисление разницы между датами и временем" 
+                           Text="Разность. Даты, время" 
                            FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20" Foreground="#D1C7CC"/>
 
 								<!-- ЛЕВАЯ КОЛОНКА (ДАТЫ) -->
@@ -192,19 +192,32 @@
 
 
 								<!-- ПРАВАЯ КОЛОНКА (ВРЕМЯ) -->
+
 								<!-- Время 1 -->
 								<TextBox Grid.Row="1" Grid.Column="2" x:Name="StartTimeTextBox" 
-                         Margin="0,0,0,15" TextChanged="TimeTextBox_TextChanged" 
-                         HorizontalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="20" 
-                         TabIndex="2" Background="#F3EFE9" BorderBrush="#6A5F65" Foreground="#4E464B" 
-                         Padding="5,2"/>
+         Margin="0,0,0,15" Text="Время" TextChanged="TimeTextBox_TextChanged" 
+         HorizontalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="20" 
+         TabIndex="2" Background="#F3EFE9" BorderBrush="#6A5F65" Foreground="#4E464B" 
+         Padding="5,2"
+         GotFocus="TimeTextBox_GotFocus" 
+         LostFocus="TimeTextBox_LostFocus" 
+         PreviewTextInput="TimeTextBox_PreviewTextInput" 
+         PreviewKeyDown="TimeTextBox_PreviewKeyDown" 
+         MouseDoubleClick="TimeTextBox_MouseDoubleClick"
+         PreviewMouseLeftButtonDown="TimeTextBox_PreviewMouseLeftButtonDown"/>
 
 								<!-- Время 2 -->
 								<TextBox Grid.Row="2" Grid.Column="2" x:Name="EndTimeTextBox" 
-                         Margin="0,0,0,15" TextChanged="TimeTextBox_TextChanged" 
-                         HorizontalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="20" 
-                         TabIndex="4" Background="#F3EFE9" BorderBrush="#6A5F65" Foreground="#4E464B" 
-                         Padding="5,2"/>
+         Margin="0,0,0,15" Text="Время" TextChanged="TimeTextBox_TextChanged" 
+         HorizontalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="20" 
+         TabIndex="4" Background="#F3EFE9" BorderBrush="#6A5F65" Foreground="#4E464B" 
+         Padding="5,2"
+         GotFocus="TimeTextBox_GotFocus" 
+         LostFocus="TimeTextBox_LostFocus" 
+         PreviewTextInput="TimeTextBox_PreviewTextInput" 
+         PreviewKeyDown="TimeTextBox_PreviewKeyDown" 
+         MouseDoubleClick="TimeTextBox_MouseDoubleClick"
+         PreviewMouseLeftButtonDown="TimeTextBox_PreviewMouseLeftButtonDown"/>
 
 								<!-- Блок вывода результата времени -->
 								<Border Grid.Row="3" Grid.Column="2" x:Name="TimeResultBorder" 
