@@ -436,22 +436,19 @@ namespace TC
 			ResetFocusToDays();
 		}
 
-		// Очистить поля ввода
-		private void ClearInputFields_Click(object sender, RoutedEventArgs e)
-		{
-			if (InputIntervalDays != null) InputIntervalDays.Text = "";
-			if (InputIntervalHours != null) InputIntervalHours.Text = "";
-			if (InputIntervalMinutes != null) InputIntervalMinutes.Text = "";
-			if (InputIntervalSeconds != null) InputIntervalSeconds.Text = "";
+	
 
-			ResetFocusToDays();
-		}
-
-		// Очистить накопленный результат
+		// Очистить поля. Вкладка 4
 		private void ClearResult_Click(object sender, RoutedEventArgs e)
 		{
 			currentTotalSeconds = 0;
 			UpdateIntervalResultText();
+			if (InputIntervalDays != null) InputIntervalDays.Text = "д";
+			if (InputIntervalHours != null) InputIntervalHours.Text = "ч";
+			if (InputIntervalMinutes != null) InputIntervalMinutes.Text = "мин";
+			if (InputIntervalSeconds != null) InputIntervalSeconds.Text = "с";
+
+
 			ResetFocusToDays();
 		}
 
@@ -529,8 +526,23 @@ namespace TC
 		// Обработчик клавиш для поля Конвертера (если он прописан в XAML)
 		private void InputValue_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
+			if (e.Key == Key.Enter)
+			{
+				if (sender is TextBox textBox)
+				{
+					// Создаем запрос на перемещение фокуса к следующему элементу в порядке TabIndex
+					var request = new TraversalRequest(FocusNavigationDirection.Next);
+
+					// Перемещаем фокус
+					textBox.MoveFocus(request);
+
+					// Блокируем стандартное поведение Enter (чтобы не было звука ошибки Windows)
+					e.Handled = true;
+				}
+			}
+
 			// Разрешаем системные клавиши (Backspace, Delete, стрелки)
-			if (e.Key == Key.Back || e.Key == Key.Delete || e.Key == Key.Left || e.Key == Key.Right)
+			else if (e.Key == Key.Back || e.Key == Key.Delete || e.Key == Key.Left || e.Key == Key.Right)
 			{
 				return;
 			}
@@ -696,5 +708,32 @@ namespace TC
 
 			textBox.Text = string.Format("{0}:{1}:{2}", parts[0], parts[1], parts[2]);
 		}
-	} // Конец класса MainWindow
-} // Конец пространства имен TC
+		// Обработка фокуса для полей интервалов (убираем подсказку при клике или переходе по Tab)
+		private void IntervalTextBox_GotFocus(object sender, RoutedEventArgs e)
+		{
+			if (sender is TextBox textBox)
+			{
+				if (textBox.Text == "д" || textBox.Text == "ч" || textBox.Text == "мин" || textBox.Text == "с")
+				{
+					textBox.Text = "";
+				}
+			}
+		}
+
+		// Обработка потери фокуса для полей интервалов (возвращаем подсказку, если поле осталось пустым)
+		private void IntervalTextBox_LostFocus(object sender, RoutedEventArgs e)
+		{
+			if (sender is TextBox textBox)
+			{
+				if (string.IsNullOrWhiteSpace(textBox.Text))
+				{
+					if (textBox.Name == "InputIntervalDays") textBox.Text = "д";
+					if (textBox.Name == "InputIntervalHours") textBox.Text = "ч";
+					if (textBox.Name == "InputIntervalMinutes") textBox.Text = "мин";
+					if (textBox.Name == "InputIntervalSeconds") textBox.Text = "с";
+				}
+			}
+		}
+
+	} // MainWindow
+} //  TC
