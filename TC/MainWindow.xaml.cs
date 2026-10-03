@@ -206,7 +206,7 @@ namespace TC
 				if (fullEnd < fullStart)
 				{
 					DateTime tmp = fullEnd;
-					fullEnd = fullStart;
+					fullEnd = fullStart; 
 					fullStart = tmp;
 				}
 
