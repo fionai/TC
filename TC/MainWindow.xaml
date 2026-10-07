@@ -2,8 +2,8 @@
 	#4E4348, #8DBBB4, #F2E9C6, #F3B569, #E86E67 - цвета вкладок
 	
 	эти цвета с дополнительными
-	#4E4348, #D1C7CC, #CBD5C0. 
-	#8DBBB4, #3B5753, #56413C. 
+	#4E4348, #D1C7CC, #CBD5C0.
+	#8DBBB4, #3B5753, #56413C.
 	#F2E9C6, #8F8563, #3F4E5A. 
 	#F3B569, #7A5123, #4B5A65. 
 	#E86E67, #6E2B27, #3D5452.
@@ -71,7 +71,7 @@
 
 						<!-- Пункты меню (всегда своего цвета) -->
 						<ListBoxItem Content="📅 Разность дат и времени" Background="#4E464B" Foreground="#FFFFFF"/>
-						<ListBoxItem Content="⏳ Вкладка 2" Background="#91BCB6" Foreground="#2E4A46"/>
+						<ListBoxItem Content="⏳ Добавить" Background="#91BCB6" Foreground="#2E4A46"/>
 						<ListBoxItem Content="🔄 Конвертер" Background="#F9EFC7" Foreground="#5B4F23"/>
 						<ListBoxItem Content="📁 Интервалы" Background="#F5B66C" Foreground="#5C360C"/>
 						<ListBoxItem Content="📁 Деление" Background="#EE6E65" Foreground="#FFFFFF" Margin="2,2,2,2"/>
@@ -127,7 +127,7 @@
 
 				<!-- вкладки -->
 				<ListBoxItem Content="Разность" Background="#4E464B" Foreground="#FFFFFF"/>
-				<ListBoxItem Content="Вкладка 2" Background="#91BCB6" Foreground="#2E4A46"/>
+				<ListBoxItem Content="Добавить" Background="#91BCB6" Foreground="#2E4A46"/>
 				<ListBoxItem Content="Конвертер" Background="#F9EFC7" Foreground="#5B4F23"/>
 				<ListBoxItem Content="Интервалы" Background="#F5B66C" Foreground="#5C360C"/>
 				<ListBoxItem Content="Деление" Background="#EE6E65" Foreground="#4B1D1A"/>
@@ -163,10 +163,11 @@
 									<RowDefinition Height="Auto"/>
 								</Grid.RowDefinitions>
 
-								<!-- Заголовок вкладки -->
+								<!-- Заголовок -->
 								<TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
-                           Text="Разность" 
-                           FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20" Foreground="#D1C7CC"/>
+									Text="Разность" 
+									FontSize="20" FontWeight="SemiBold" 
+									Margin="0,0,0,20" Foreground="#D1C7CC"/>
 
 								<!-- ЛЕВАЯ КОЛОНКА (ДАТЫ) -->
 								<!-- Дата 1 -->
@@ -245,19 +246,32 @@
 				</TabItem>
 
 
-				<!-- Вкладка 2: Пустая (Набор 2) -->
-				<TabItem>
+				<!-- Вкладка 2: Добавить -->
+				<TabItem Background="#F3EFE9">
 					<Grid Background="#F3EFE9">
 
 						<Border Background="#91BCB6" CornerRadius="8" Padding="15" Margin="1">
 							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="0.45*"/>
+									<ColumnDefinition Width="0.10*"/>
+									<ColumnDefinition Width="0.45*"/>
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+								</Grid.RowDefinitions>
+								
+								<!-- Заголовок -->
+								<TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
+										   Text="К дате / времени добавить интервал"
+										   FontSize="20" FontWeight="SemiBold" 
+										   Margin="0,0,0,20"
+										   Foreground="#3B5753"/>
 
-								<TextBlock Text="Вкладка 2 (Пусто)" 
-                           HorizontalAlignment="Center" 
-                           VerticalAlignment="Center" 
-                           FontSize="16" 
-                           Foreground="#2E4A46" 
-                           FontWeight="SemiBold"/>
 							</Grid>
 						</Border>
 					</Grid>
@@ -271,6 +285,32 @@
 			<!-- прокрутка, при необходимости -->
 			<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 				<Grid>
+								<!-- 1. СТИЛИЗОВАННАЯ КНОПКА ПОД НАБОР 3 -->
+								<Grid.Resources>
+									<Style x:Key="CopyButtonStyle" TargetType="Button">
+										<Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+										<Setter Property="Content" Value="&#xE8C8;"/>
+										<Setter Property="FontSize" Value="11"/>
+										<Setter Property="Width" Value="24"/>
+										<Setter Property="Height" Value="24"/>
+										<Setter Property="VerticalAlignment" Value="Top"/>
+										<Setter Property="HorizontalAlignment" Value="Right"/>
+										<Setter Property="Margin" Value="5,2,0,0"/>
+										<!-- Настройка цветов кнопки под палитру желтого набора -->
+										<Setter Property="Background" Value="#F3E5A9"/>
+										<Setter Property="BorderBrush" Value="#CBBF92"/>
+										<Setter Property="BorderThickness" Value="1"/>
+										<Setter Property="Foreground" Value="#5B4F23"/>
+										<Setter Property="Cursor" Value="Hand"/>
+										<Setter Property="ToolTip" Value="Копировать"/>
+										<Style.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter Property="Background" Value="#E9D994"/>
+												<Setter Property="BorderBrush" Value="#A89C6F"/>
+											</Trigger>
+										</Style.Triggers>
+									</Style>
+								</Grid.Resources>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="*"/>
@@ -310,32 +350,6 @@
 						<!-- ================= ПРАВАЯ ЧАСТЬ (60%) ================= -->
 						<StackPanel Grid.Column="2">
 							<Grid Grid.IsSharedSizeScope="True">
-								<!-- 1. СТИЛИЗОВАННАЯ КНОПКА ПОД НАБОР 3 -->
-								<Grid.Resources>
-									<Style x:Key="CopyButtonStyle" TargetType="Button">
-										<Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-										<Setter Property="Content" Value="&#xE8C8;"/>
-										<Setter Property="FontSize" Value="11"/>
-										<Setter Property="Width" Value="24"/>
-										<Setter Property="Height" Value="24"/>
-										<Setter Property="VerticalAlignment" Value="Top"/>
-										<Setter Property="HorizontalAlignment" Value="Right"/>
-										<Setter Property="Margin" Value="5,2,0,0"/>
-										<!-- Настройка цветов кнопки под палитру желтого набора -->
-										<Setter Property="Background" Value="#F3E5A9"/>
-										<Setter Property="BorderBrush" Value="#CBBF92"/>
-										<Setter Property="BorderThickness" Value="1"/>
-										<Setter Property="Foreground" Value="#5B4F23"/>
-										<Setter Property="Cursor" Value="Hand"/>
-										<Setter Property="ToolTip" Value="Копировать"/>
-										<Style.Triggers>
-											<Trigger Property="IsMouseOver" Value="True">
-												<Setter Property="Background" Value="#E9D994"/>
-												<Setter Property="BorderBrush" Value="#A89C6F"/>
-											</Trigger>
-										</Style.Triggers>
-									</Style>
-								</Grid.Resources>
 
 								<!-- 2. ОПРЕДЕЛЕНИЕ КОЛОНОК И СТРОК -->
 								<Grid.ColumnDefinitions>
@@ -384,18 +398,39 @@
 								<Button Grid.Row="5" Grid.Column="2" Style="{StaticResource CopyButtonStyle}" Click="CopyResult_Click" Tag="{Binding ElementName=ResultYears}"/>
 							</Grid>
 
-							<!-- Разделитель в цвет Акцента Набора 3 -->
-							<Separator Margin="0,15,0,15" Background="#CBBF92"/>
-							
-							<!-- Итоговая строка в цвете Набора 3 -->
-							<TextBlock x:Name="FullFormattedResult" Text="0 Лет 0 Месяцев 0 Дней 0 Часов 0 Минут 0 Секунд" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="#5B4F23"/>
-						</StackPanel>
+											<!-- Разделитель в цвет Акцента Набора 3 -->
+											<Separator Margin="0,15,0,15" Background="#CBBF92"/>
+
+											<!-- БОКС ИТОГОВОГО РЕЗУЛЬТАТА С КНОПКОЙ КОПИРОВАНИЯ -->
+											<Border Background="Transparent" BorderBrush="#CBBF92" BorderThickness="1" CornerRadius="2" 
+									MinHeight="60" Padding="10,5" HorizontalAlignment="Stretch">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="*"/>
+														<ColumnDefinition Width="Auto"/>
+													</Grid.ColumnDefinitions>
+
+													<!-- строка результат -->
+													<TextBlock x:Name="ConverterResult" Grid.Column="0" 
+											   Text="0 дн 0 мес 0 Дней 0 ч 0 мин 0 с" 
+											   FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap" 
+											   Foreground="#5B4F23" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+													<!-- Кнопка Копировать -->
+													<Button Name="ConverterCopy" Grid.Column="1" Style="{StaticResource CopyButtonStyle}" 
+											Width="32" Height="32" Margin="10,0,0,0"
+											VerticalAlignment="Center" HorizontalAlignment="Right"
+											Click="CopyFullResult_Click"/>
+												</Grid>
+											</Border>
+										</StackPanel>
+									</Grid>
+								</Grid>
+							</ScrollViewer>
+						</Border>
 					</Grid>
-				</Grid>
-			</ScrollViewer>
-		</Border>
-	</Grid>
-</TabItem>
+				</TabItem>
+
 
 				<!-- Вкладка 4: Сумма/разность интервалов (Набор 4) -->
 				<TabItem>
@@ -443,7 +478,6 @@
 														                  TextBlock.Foreground="#F3B569"/>
 														</Border>
 														<ControlTemplate.Triggers>
-															<!-- Исправленный триггер с явным указанием типов свойств Border и TextBlock -->
 															<Trigger Property="IsMouseOver" Value="True">
 																<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#F3B569"/>
 																<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#7A5123"/>
@@ -477,8 +511,13 @@
 														                  TextBlock.FontWeight="SemiBold"/>
 														</Border>
 														<ControlTemplate.Triggers>
-															<!-- Исправленный триггер инверсии для математических кнопок -->
+															
 															<Trigger Property="IsMouseOver" Value="True">
+																<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#F3B569"/>
+																<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#7A5123"/>
+																<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#7A5123"/>
+															</Trigger>
+															<Trigger Property="IsFocused" Value="True">
 																<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#F3B569"/>
 																<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#7A5123"/>
 																<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#7A5123"/>
@@ -489,7 +528,7 @@
 											</Setter>
 										</Style>
 
-										<!-- 3. Иконка копирования внутри рамки вывода результата -->
+										<!-- 3. Иконка копирования -->
 										<Style x:Key="IconButtonStyle" TargetType="Button">
 											<Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
 											<Setter Property="Content" Value="&#xE8C8;"/>
@@ -521,16 +560,12 @@
 									<TextBlock Grid.Row="0" Grid.ColumnSpan="8" Text="Сумма/разность интервалов" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20" Foreground="#7A5123"/>
 
 									<!-- СТРОКА 1: ПОЛЯ ВВОДА -->
-									<!-- Дни -->
 									<TextBox Grid.Row="1" Grid.Column="0" x:Name="InputIntervalDays" Text="д" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="1" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
-									<!-- Часы -->
 									<TextBox Grid.Row="1" Grid.Column="2" x:Name="InputIntervalHours" Text="ч" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="2" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
-									<!-- Минуты -->
 									<TextBox Grid.Row="1" Grid.Column="4" x:Name="InputIntervalMinutes" Text="мин" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="3" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
-									<!-- Секунды -->
 									<TextBox Grid.Row="1" Grid.Column="6" x:Name="InputIntervalSeconds" Text="с" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="4" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
 								
@@ -541,7 +576,7 @@
 
 									<Button Grid.Row="2" Grid.Column="6" Margin="0,25,0,0" Content="Очистить" Style="{StaticResource IntervalButtonStyle}" Click="ClearResult_Click" Height="45" Padding="15,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 									
-									<!-- СТРОКА 3: БЛОК ВЫВОДА РЕЗУЛЬТАТА ВНИЗУ КАРТОЧКИ (Стилизован один в один под первую вкладку) -->
+									<!-- СТРОКА 3: БЛОК ВЫВОДА РЕЗУЛЬТАТА -->
 									<Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="8" x:Name="IntervalResultBorder" 
 							Background="Transparent" BorderBrush="#7A5123" BorderThickness="1" CornerRadius="2" 
 							Height="70" Margin="0,25,0,0" HorizontalAlignment="Stretch">
@@ -551,8 +586,8 @@
 												<ColumnDefinition Width="Auto"/>
 											</Grid.ColumnDefinitions>
 
-											<TextBlock x:Name="IntervalResultText" Grid.Column="0" Text="0 д 0 ч 0 мин 0 с" FontSize="20" FontWeight="SemiBold" Foreground="#7A5123" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-											<Button Grid.Column="1" Style="{StaticResource IconButtonStyle}" Click="CopyIntervalResult_Click" ToolTip="Copy" VerticalAlignment="Center"/>
+											<TextBlock x:Name="IntervalResult" Grid.Column="0" Text="0 д 0 ч 0 мин 0 с" FontSize="20" FontWeight="SemiBold" Foreground="#7A5123" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+											<Button Name="IntervalCopy" Grid.Column="1" Style="{StaticResource IconButtonStyle}" Click="CopyFullResult_Click" ToolTip="Copy" VerticalAlignment="Center"/>
 										</Grid>
 									</Border>
 								</Grid>
@@ -561,13 +596,13 @@
 					</Grid>
 				</TabItem>
 
-				<!-- Вкладка 5: Пустая (Набор 5) -->
+				<!-- Вкладка 5: Пустая  -->
 				<TabItem>
 					<Grid Background="#F3EFE9">
-						<!-- Кораллово-красная карточка с тонким зазором по периметру -->
+						<!-- Коралловая карточка -->
 						<Border Background="#EE6E65" CornerRadius="8" Padding="15" Margin="5">
 							<Grid>
-								<!-- Текст теперь тёмно-бордовый (#4B1D1A) из Набора 5 -->
+								<!-- Текст тёмно-бордовый -->
 								<TextBlock Text="Вкладка 5 (Пусто)" 
                            HorizontalAlignment="Center" 
                            VerticalAlignment="Center" 

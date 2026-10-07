@@ -41,7 +41,6 @@ namespace TC
 					}), System.Windows.Threading.DispatcherPriority.Input);
 				}
 
-
 				// если переключились на вкладку Интервалы
 				if (e.Source is TabControl && MainTabControl.SelectedIndex == 3)
 				{
@@ -62,7 +61,7 @@ namespace TC
 
 		}
 
-		// 1. Клик по кнопке-гамбургеру открывает всплывающее меню под ней
+		// 1. Клик по кнопке-гамбургеру
 		private void MenuButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (MenuPopup != null)
@@ -88,7 +87,7 @@ namespace TC
 				this.PreviewMouseDown -= CloseMenuOnOutsideClick;
 			}
 		}
-		// 2. Клик по пункту из выпадающего списка переключает вкладку и СВОРЫВАЕТ меню обратно
+		// 2. Клик по пункту из выпадающего списка переключает вкладку и сворачивает меню
 		private void MenuListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (MainTabControl != null && MenuListBox != null && MenuListBox.SelectedIndex >= 0)
@@ -171,7 +170,7 @@ namespace TC
 				}
 				days = (end - tmpLoop).Days;
 
-				DateResultText.Text = $"{totalDays} дней \n({years} лет, {months} мес, {days} дн.)";
+				DateResultText.Text = $"{totalDays} д \n({years} лет, {months} мес, {days} д)";
 			}
 			else
 			{
@@ -196,7 +195,7 @@ namespace TC
 			}
 
 			// ==========================================
-			// 3. ОБЩАЯ РАЗНОСТЬ (Дата1+Время1 и Дата2+Время2)
+			// 3. ОБЩАЯ РАЗНОСТЬ (Дата1 Время1 - Дата2 Время2)
 			// ==========================================
 			if (isDateValid && isTimeValid)
 			{
@@ -215,7 +214,7 @@ namespace TC
 				int totalDiffDays = totalDiff.Days;
 
 				// Форматируем остаток времени (часы, минуты, секунды)
-				TotalResultText.Text = $"Общая разность: {totalDiffDays} дн. {totalDiff:hh\\:mm\\:ss}";
+				TotalResultText.Text = $"{totalDiffDays} дн. {totalDiff:hh\\:mm\\:ss}";
 			}
 			else
 			{
@@ -247,7 +246,7 @@ namespace TC
 			if (InputValue == null || FromUnit == null ||
 				ResultSeconds == null || ResultMinutes == null || ResultHours == null ||
 				ResultWeeks == null || ResultMonths == null || ResultYears == null ||
-				FullFormattedResult == null)
+				ConverterResult == null)
 			{
 				return;
 			}
@@ -264,7 +263,7 @@ namespace TC
 			// Используем стандартный double, который есть во всех версиях .NET Framework
 			if (!double.TryParse(inputText, out double inputNumber) || inputNumber < 0 || double.IsInfinity(inputNumber) || double.IsNaN(inputNumber))
 			{
-				FullFormattedResult.Text = "Введите корректное положительное число";
+				ConverterResult.Text = "Введите корректное положительное число";
 				return;
 			}
 
@@ -318,10 +317,10 @@ namespace TC
 			double seconds = remainder % secondsInMinute;
 
 			// Выводим готовую строку формата
-			FullFormattedResult.Text = string.Format("{0:N0}\u00A0Лет {1}\u00A0Месяцев {2}\u00A0Дней {3}\u00A0Часов {4}\u00A0Минут {5}\u00A0Секунд",
+			ConverterResult.Text = string.Format("{0:N0}\u00A0лет {1}\u00A0мес {2}\u00A0д {3}\u00A0ч {4}\u00A0мин {5}\u00A0с",
 				years, months, days, hours, minutes, seconds);
 		}
-
+		//вкладка 3
 		private void CopyResult_Click(object sender, RoutedEventArgs e)
 		{
 			if (sender is Button copyButton && copyButton.Tag is TextBlock targetTextBlock)
@@ -339,7 +338,7 @@ namespace TC
 					}
 					catch (System.Runtime.InteropServices.ExternalException)
 					{
-						// Защита на случай, если буфер обмена временно заблокирован другой программой
+						// Защита на случай, если буфер обмена временно заблокирован
 					}
 				}
 			}
@@ -354,7 +353,7 @@ namespace TC
 			ResultWeeks.Text = "0";
 			ResultMonths.Text = "0";
 			ResultYears.Text = "0";
-			FullFormattedResult.Text = "0\u00A0Лет 0\u00A0Месяцев 0\u00A0Дней 0\u00A0Часов 0\u00A0Минут 0\u00A0Секунд";
+			ConverterResult.Text = "0\u00A0лет 0\u00A0мес 0\u00A0д 0\u00A0ч 0\u00A0мин 0\u00A0с";
 		}
 
 		private void StartDatePicker_Loaded(object sender, RoutedEventArgs e)
@@ -400,7 +399,7 @@ namespace TC
 		private void IntervalTab_Loaded(object sender, RoutedEventArgs e)
 		{
 			// Восстанавливаем текст результата, если он уже вычислялся ранее
-			if (IntervalResultText != null)
+			if (IntervalResult != null)
 			{
 				UpdateIntervalResultText();
 			}
@@ -453,12 +452,28 @@ namespace TC
 		}
 
 		// Копирование строки формата в буфер
-		private void CopyIntervalResult_Click(object sender, RoutedEventArgs e)
+		private void CopyFullResult_Click(object sender, RoutedEventArgs e)
 		{
-			if (IntervalResultText == null) return;
+			//if (IntervalResult != null)
+			//try
+			//{
+			//	Clipboard.SetText(IntervalResult.Text);
+			//}
+			//catch (System.Runtime.InteropServices.ExternalException) { }
 			try
 			{
-				Clipboard.SetText(IntervalResultText.Text);
+				if (sender is Button clickedButton)
+				{
+					string buttonName = clickedButton.Name;
+					string textBlockName = buttonName.Substring(0, buttonName.Length - 4) + "Result";
+
+					if (this.FindName(textBlockName) is TextBlock resultTextBlock)
+					{
+
+						Clipboard.SetText(resultTextBlock.Text);
+					}
+
+				}
 			}
 			catch (System.Runtime.InteropServices.ExternalException) { }
 		}
@@ -479,7 +494,7 @@ namespace TC
 
 		private void UpdateIntervalResultText()
 		{
-			if (IntervalResultText == null) return;
+			if (IntervalResult == null) return;
 
 			long tempSeconds = currentTotalSeconds;
 
@@ -492,7 +507,7 @@ namespace TC
 			long minutes = tempSeconds / 60;
 			long seconds = tempSeconds % 60;
 
-			IntervalResultText.Text = string.Format("{0} д {1} ч {2} мин {3} с", days, hours, minutes, seconds);
+			IntervalResult.Text = string.Format("{0} д {1} ч {2} мин {3} с", days, hours, minutes, seconds);
 		}
 
 		private void ResetFocusToDays()
