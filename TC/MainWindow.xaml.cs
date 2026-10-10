@@ -750,5 +750,130 @@ namespace TC
 			}
 		}
 
+		private void AddIntervalAdd_Click(object sender, RoutedEventArgs e)
+		{
+			CalculateTargetDateTime(true);
+		}
+
+		// Кнопка МИНУС на Вкладке 2
+		private void AddIntervalSubtract_Click(object sender, RoutedEventArgs e)
+		{
+			CalculateTargetDateTime(false);
+		}
+		//Вставить на вкладке 2
+		private void AddIntervalPaste_Click(object sender, RoutedEventArgs e)
+		{
+			// Проверяем, что в полях результата есть данные
+			if (AddResultDate == null || AddResultTime == null || StartDate == null || StartTime == null) return;
+
+			if (AddResultDate.SelectedDate == null)
+			{
+				MessageBox.Show("Нет данных для вставки. Сначала выполните расчет.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
+
+			// 1. Переносим результирующую дату наверх в поле ввода
+			StartDate.SelectedDate = AddResultDate.SelectedDate;
+
+			// 2. Переносим результирующее время наверх в поле ввода
+			StartTime.Text = AddResultTime.Text;
+
+			// 3. Сбрасываем поля ввода интервалов в исходные подсказки (д, ч, мин, с)
+			if (AddIntervalDays != null) AddIntervalDays.Text = "д";
+			if (AddIntervalHours != null) AddIntervalHours.Text = "ч";
+			if (AddIntervalMinutes != null) AddIntervalMinutes.Text = "мин";
+			if (AddIntervalSeconds != null) AddIntervalSeconds.Text = "с";
+
+			// 4. Очищаем нижние поля результата, так как они стали начальными данными
+			AddResultDate.SelectedDate = null;
+			AddResultTime.Text = "00:00:00";
+
+			// 5. Возвращаем фокус на поле ввода дней, чтобы можно было сразу вводить новый интервал
+			if (AddIntervalDays != null)
+			{
+				AddIntervalDays.Focus();
+				AddIntervalDays.SelectAll();
+			}
+		}
+
+		// Кнопка ОЧИСТИТЬ на Вкладке 2
+		private void AddIntervalClear_Click(object sender, RoutedEventArgs e)
+		{
+			// 1. Полностью очищаем базовую дату (ставим null, чтобы вернуть подсказку), а время в "Время"
+			if (StartDate != null) StartDate.SelectedDate = null;
+			if (StartTime != null) StartTime.Text = "Время";
+
+			// 2. Сбрасываем числовые поля ввода интервалов в дефолтные маски
+			if (AddIntervalDays != null) AddIntervalDays.Text = "д";
+			if (AddIntervalHours != null) AddIntervalHours.Text = "ч";
+			if (AddIntervalMinutes != null) AddIntervalMinutes.Text = "мин";
+			if (AddIntervalSeconds != null) AddIntervalSeconds.Text = "с";
+
+			// 3. Полностью очищаем нижние поля вывода результатов
+			if (AddResultDate != null) AddResultDate.SelectedDate = null;
+			if (AddResultTime != null) AddResultTime.Text = "00:00:00";
+
+			// 4. Возвращаем фокус на Стартовую дату, как требует UI-логика
+			if (StartDate != null) StartDate.Focus();
+		}
+
+		// Главный метод вычисления даты и времени для Вкладки 2
+		private void CalculateTargetDateTime(bool isAddition)
+		{
+			if (StartDate == null || StartTime == null || AddResultDate == null || AddResultTime == null) return;
+
+			// 1. Проверяем валидность базовой даты
+			if (StartDate.SelectedDate == null)
+			{
+				MessageBox.Show("Пожалуйста, выберите базовую дату.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+				return;
+			}
+			DateTime baseDate = StartDate.SelectedDate.Value;
+
+			// 2. Парсим базовое время (если там "Время" или маска пуста — берем 00:00:00)
+			TimeSpan baseTime = TimeSpan.Zero;
+			if (StartTime.Text != "Время" && StartTime.Text != "__:__:__")
+			{
+				TimeSpan.TryParse(StartTime.Text, out baseTime);
+			}
+
+			// Объединяем стартовую дату и время в единую точку отсчета
+			DateTime targetDateTime = baseDate.Add(baseTime);
+
+			// 3. Безопасно парсим введенные интервалы (если в поле осталась подсказка буквами — запишется 0)
+			double.TryParse(AddIntervalDays.Text, out double d);
+			double.TryParse(AddIntervalHours.Text, out double h);
+			double.TryParse(AddIntervalMinutes.Text, out double m);
+			double.TryParse(AddIntervalSeconds.Text, out double s);
+
+			// Если идет вычитание, инвертируем знаки всех введенных чисел
+			if (!isAddition)
+			{
+				d = -d;
+				h = -h;
+				m = -m;
+				s = -s;
+			}
+
+			try
+			{
+				// 4. Последовательно добавляем/вычитаем каждую единицу времени.
+				// Это позволяет вводить любые гигантские числа в любое поле — .NET сам переведет 
+				// лишние секунды в минуты, минуты в часы, а часы в дни и изменит дату.
+				targetDateTime = targetDateTime.AddDays(d);
+				targetDateTime = targetDateTime.AddHours(h);
+				targetDateTime = targetDateTime.AddMinutes(m);
+				targetDateTime = targetDateTime.AddSeconds(s);
+
+				// 5. Выводим результат в наши заблокированные поля
+				AddResultDate.SelectedDate = targetDateTime.Date;
+				AddResultTime.Text = targetDateTime.ToString("HH:mm:ss");
+			}
+			catch (ArgumentOutOfRangeException)
+			{
+				MessageBox.Show("Результат вычислений выходит за рамки допустимого календаря (минимальная дата: 01.01.0001, максимальная: 31.12.9999).", "Выход за границы", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+		}
+	
 	} // MainWindow
 } //  TC
