@@ -110,7 +110,7 @@ namespace TC
 			// Безопасная проверка: если UI ещё не инициализировался, выходим
 			if (StartDatePicker == null || EndDatePicker == null ||
 				StartTimeTextBox == null || EndTimeTextBox == null ||
-				DateResultText == null || TimeResultText == null || TotalResultText == null)
+				DateResultText == null || TimeResultText == null || DifferenceResult == null)
 			{
 				return;
 			}
@@ -214,11 +214,11 @@ namespace TC
 				int totalDiffDays = totalDiff.Days;
 
 				// Форматируем остаток времени (часы, минуты, секунды)
-				TotalResultText.Text = $"{totalDiffDays} дн. {totalDiff:hh\\:mm\\:ss}";
+				DifferenceResult.Text = $"{totalDiffDays} дн. {totalDiff:hh\\:mm\\:ss}";
 			}
 			else
 			{
-				TotalResultText.Text = ""; // Если хотя бы одно из 4-х полей пустое — пусто
+				DifferenceResult.Text = ""; // Если хотя бы одно из 4-х полей пустое — пусто
 			}
 		}
 
