@@ -7,7 +7,9 @@
         xmlns:local="clr-namespace:TC"
         mc:Ignorable="d"
         Title="Калькулятор времени" Height="600" Width="600"
-        Background="#F3F3F3" FontFamily="Segoe UI">
+        Background="#F3F3F3" FontFamily="Segoe UI"
+		Icon="Images/TCicon.ico"
+			>
 
 	<Window.Resources>
 		<!-- 1. Стиль для кнопки Очистить -->
@@ -33,7 +35,7 @@
 			</Setter>
 		</Style>
 
-		<!-- 2. Математический стиль для кнопок + и - -->
+		<!-- 2. стиль для кнопок + и - -->
 		<Style x:Key="AddMathButtonStyle" TargetType="Button" BasedOn="{StaticResource AddIntervalButtonStyle}">
 			<Setter Property="IsTabStop" Value="True"/>
 			<Setter Property="Template">
@@ -605,398 +607,396 @@
 											Width="32" Height="32" Margin="10,0,0,0"
 											VerticalAlignment="Center" HorizontalAlignment="Right"
 											Click="CopyFullResult_Click"/>
-												</Grid>
-											</Border>
-										</StackPanel>
-									</Grid>
 								</Grid>
-							</ScrollViewer>
-						</Border>
+							</Border>
+						</StackPanel>
 					</Grid>
-				</TabItem>
+				</Grid>
+			</ScrollViewer>
+		</Border>
+	</Grid>
+</TabItem>
 
 
-				<!-- Вкладка 4: Сумма/разность интервалов (Набор 4) -->
-				<TabItem>
-					<Grid Background="#E3DDD3">
-						<!-- Карточка перекрашена в #F3B569 с отступами Margin="1" для стыковки краев -->
-						<Border Background="#F3B569" CornerRadius="8" Padding="15" Margin="1">
-							<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-								<Grid KeyboardNavigation.TabNavigation="Cycle">
-							
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="0.22*"/>
-										<ColumnDefinition Width="0.04*"/>
-										<ColumnDefinition Width="0.22*"/>
-										<ColumnDefinition Width="0.04*"/>
-										<ColumnDefinition Width="0.22*"/>
-										<ColumnDefinition Width="0.04*"/>
-										<ColumnDefinition Width="0.22*"/>
-									</Grid.ColumnDefinitions>
-									<Grid.RowDefinitions>
-										<RowDefinition Height="Auto" />
-										<RowDefinition Height="Auto" />
-										<RowDefinition Height="Auto" />
-										<RowDefinition Height="Auto" />
-									</Grid.RowDefinitions>
+<!-- Вкладка 4: Сумма/разность интервалов -->
+<TabItem>
+	<Grid Background="#E3DDD3">
+		<Border Background="#F3B569" CornerRadius="8" Padding="15" Margin="1">
+			<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+				<Grid KeyboardNavigation.TabNavigation="Cycle">
+			
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="0.22*"/>
+						<ColumnDefinition Width="0.04*"/>
+						<ColumnDefinition Width="0.22*"/>
+						<ColumnDefinition Width="0.04*"/>
+						<ColumnDefinition Width="0.22*"/>
+						<ColumnDefinition Width="0.04*"/>
+						<ColumnDefinition Width="0.22*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
 
-									<!-- Описание стилей кнопок под Набор 4 с инверсией цвета -->
-									<Grid.Resources>
-										<!-- 1. Основной стиль для простых кнопок -->
-										<Style x:Key="IntervalButtonStyle" TargetType="Button">
-											<Setter Property="FontSize" Value="14"/>
-											<Setter Property="Cursor" Value="Hand"/>
-											<Setter Property="IsTabStop" Value="False"/>
-											<Setter Property="Template">
-												<Setter.Value>
-													<ControlTemplate TargetType="Button">
-														<Border x:Name="ButtonBorder" 
-															Background="#7A5123" 
-															BorderBrush="#7A5123" 
-															BorderThickness="1" 
-															Padding="12,5" 
-															CornerRadius="2">
-															<ContentPresenter x:Name="ButtonContent" 
-														                  HorizontalAlignment="Center" 
-														                  VerticalAlignment="Center" 
-														                  TextBlock.Foreground="#F3B569"/>
-														</Border>
-														<ControlTemplate.Triggers>
-															<Trigger Property="IsMouseOver" Value="True">
-																<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#F3B569"/>
-																<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#7A5123"/>
-																<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#7A5123"/>
-															</Trigger>
-														</ControlTemplate.Triggers>
-													</ControlTemplate>
-												</Setter.Value>
-											</Setter>
-										</Style>
+					<!-- Описание стилей кнопок под Набор 4 с инверсией цвета -->
+					<Grid.Resources>
+						<!-- 1. Основной стиль для простых кнопок -->
+						<Style x:Key="IntervalButtonStyle" TargetType="Button">
+							<Setter Property="FontSize" Value="14"/>
+							<Setter Property="Cursor" Value="Hand"/>
+							<Setter Property="IsTabStop" Value="False"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="Button">
+										<Border x:Name="ButtonBorder" 
+											Background="#7A5123" 
+											BorderBrush="#7A5123" 
+											BorderThickness="1" 
+											Padding="12,5" 
+											CornerRadius="2">
+											<ContentPresenter x:Name="ButtonContent" 
+										                  HorizontalAlignment="Center" 
+										                  VerticalAlignment="Center" 
+										                  TextBlock.Foreground="#F3B569"/>
+										</Border>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#F3B569"/>
+												<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#7A5123"/>
+												<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#7A5123"/>
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
 
-										<!-- 2. Математический стиль для кнопок + и -, наследующий триггеры основного стиля -->
-										<Style x:Key="MathButtonStyle" TargetType="Button" BasedOn="{StaticResource IntervalButtonStyle}">
-											<Setter Property="IsTabStop" Value="True"/>
-											<Setter Property="Template">
-												<Setter.Value>
-													<ControlTemplate TargetType="Button">
-														
-														<Border x:Name="ButtonBorder" 
-															Background="#7A5123" 
-															BorderBrush="#7A5123" 
-															BorderThickness="1" 
-															
-															Height="45" 
-															CornerRadius="2">
-															<ContentPresenter x:Name="ButtonContent" 
-														                  HorizontalAlignment="Center" 
-														                  VerticalAlignment="Center" 
-														                  TextBlock.Foreground="#F3B569" 
-														                  TextBlock.FontSize="24" 
-														                  TextBlock.FontWeight="SemiBold"/>
-														</Border>
-														<ControlTemplate.Triggers>
-															
-															<Trigger Property="IsMouseOver" Value="True">
-																<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#F3B569"/>
-																<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#7A5123"/>
-																<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#7A5123"/>
-															</Trigger>
-															<Trigger Property="IsFocused" Value="True">
-																<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#F3B569"/>
-																<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#7A5123"/>
-																<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#7A5123"/>
-															</Trigger>
-														</ControlTemplate.Triggers>
-													</ControlTemplate>
-												</Setter.Value>
-											</Setter>
-										</Style>
+						<!-- 2. стиль для кнопок + и -, наследующий основной стиль -->
+						<Style x:Key="MathButtonStyle" TargetType="Button" BasedOn="{StaticResource IntervalButtonStyle}">
+							<Setter Property="IsTabStop" Value="True"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="Button">
+										
+										<Border x:Name="ButtonBorder" 
+											Background="#7A5123" 
+											BorderBrush="#7A5123" 
+											BorderThickness="1" 
+											
+											Height="45" 
+											CornerRadius="2">
+											<ContentPresenter x:Name="ButtonContent" 
+										                  HorizontalAlignment="Center" 
+										                  VerticalAlignment="Center" 
+										                  TextBlock.Foreground="#F3B569" 
+										                  TextBlock.FontSize="24" 
+										                  TextBlock.FontWeight="SemiBold"/>
+										</Border>
+										<ControlTemplate.Triggers>
+											
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#F3B569"/>
+												<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#7A5123"/>
+												<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#7A5123"/>
+											</Trigger>
+											<Trigger Property="IsFocused" Value="True">
+												<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#F3B569"/>
+												<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#7A5123"/>
+												<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#7A5123"/>
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
 
-										<!-- 3. Иконка копирования -->
-										<Style x:Key="IconButtonStyle" TargetType="Button">
-											<Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-											<Setter Property="Content" Value="&#xE8C8;"/>
-											<Setter Property="FontSize" Value="14"/>
-											<Setter Property="Width" Value="36"/>
-											<Setter Property="Height" Value="36"/>
-											<Setter Property="Padding" Value="0"/>
-											<Setter Property="IsTabStop" Value="False"/>
-											<Setter Property="Cursor" Value="Hand"/>
-											<Setter Property="Template">
-												<Setter.Value>
-													<ControlTemplate TargetType="Button">
-														<Border x:Name="ButtonBorder" Background="Transparent" CornerRadius="2">
-															<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="#7A5123"/>
-														</Border>
-														<ControlTemplate.Triggers>
-															<Trigger Property="IsMouseOver" Value="True">
-																<Setter TargetName="ButtonBorder" Property="Background" Value="#E3DDD3"/>
-															</Trigger>
-														</ControlTemplate.Triggers>
-													</ControlTemplate>
-												</Setter.Value>
-											</Setter>
-										</Style>
-									</Grid.Resources>
+						<!-- 3. Иконка копирования -->
+						<Style x:Key="IconButtonStyle" TargetType="Button">
+							<Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+							<Setter Property="Content" Value="&#xE8C8;"/>
+							<Setter Property="FontSize" Value="14"/>
+							<Setter Property="Width" Value="36"/>
+							<Setter Property="Height" Value="36"/>
+							<Setter Property="Padding" Value="0"/>
+							<Setter Property="IsTabStop" Value="False"/>
+							<Setter Property="Cursor" Value="Hand"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="Button">
+										<Border x:Name="ButtonBorder" Background="Transparent" CornerRadius="2">
+											<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="#7A5123"/>
+										</Border>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter TargetName="ButtonBorder" Property="Background" Value="#E3DDD3"/>
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</Grid.Resources>
 
 
-									<!-- Строка 0 -->
-									<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Margin="0,0,0,20">
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="0.22*"/>
-											<ColumnDefinition Width="0.04*"/>
-											<ColumnDefinition Width="0.22*"/>
-											<ColumnDefinition Width="0.04*"/>
-											<ColumnDefinition Width="0.22*"/>
-											<ColumnDefinition Width="0.04*"/>
-											<ColumnDefinition Width="0.22*"/>
-										</Grid.ColumnDefinitions>
+					<!-- Строка 0 -->
+					<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Margin="0,0,0,20">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="0.22*"/>
+							<ColumnDefinition Width="0.04*"/>
+							<ColumnDefinition Width="0.22*"/>
+							<ColumnDefinition Width="0.04*"/>
+							<ColumnDefinition Width="0.22*"/>
+							<ColumnDefinition Width="0.04*"/>
+							<ColumnDefinition Width="0.22*"/>
+						</Grid.ColumnDefinitions>
 
-										<!-- Заголовок страницы -->
-										<TextBlock Grid.Column="0" Grid.ColumnSpan="5" 
-												Text="Сумма/разность интервалов" 
-												FontSize="20" FontWeight="SemiBold" 
-												Foreground="#7A5123" 
-												VerticalAlignment="Center"/>
+						<!-- Заголовок страницы -->
+						<TextBlock Grid.Column="0" Grid.ColumnSpan="5" 
+								Text="Сумма/разность интервалов" 
+								FontSize="20" FontWeight="SemiBold" 
+								Foreground="#7A5123" 
+								VerticalAlignment="Center"/>
 
-										<!-- Кнопка "Из буфера" (В стиле Набора 4, строго над кнопкой Очистить) -->
-										<Button Grid.Column="6" 
-												x:Name="FromBufferInterval" 
-												Content="Из буфера" 
-												Style="{StaticResource IntervalButtonStyle}" 
-												Click="FromBuffer4_Click" 
-												Height="45"
-												HorizontalAlignment="Stretch" 
-												VerticalAlignment="Center"/>
-									</Grid>
-
-									<!-- СТРОКА 1: ПОЛЯ ВВОДА -->
-									<TextBox Grid.Row="1" Grid.Column="0" x:Name="DaysInterval" Text="д" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="1" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-
-									<TextBox Grid.Row="1" Grid.Column="2" x:Name="HoursInterval" Text="ч" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="2" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-
-									<TextBox Grid.Row="1" Grid.Column="4" x:Name="MinutesInterval" Text="мин" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="3" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-
-									<TextBox Grid.Row="1" Grid.Column="6" x:Name="SecondsInterval" Text="с" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="4" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-
-								
-									<!-- СТРОКА 2: Кнопки -->
-									<Button Grid.Row="2" Grid.Column="0" Margin="0,25,0,0" Content="+" Style="{StaticResource MathButtonStyle}" Click="AddInterval_Click" TabIndex="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-
-									<Button Grid.Row="2" Grid.Column="2" Margin="0,25,0,0" Content="-" Style="{StaticResource MathButtonStyle}" Click="SubtractInterval_Click" TabIndex="6"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-
-									<Button Grid.Row="2" Grid.Column="6" Margin="0,25,0,0" Content="Очистить" Style="{StaticResource IntervalButtonStyle}" Click="ClearResult_Click" Height="45" Padding="15,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-									
-									<!-- СТРОКА 3: БЛОК ВЫВОДА РЕЗУЛЬТАТА -->
-									<Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="8" x:Name="IntervalResultBorder" 
-							Background="Transparent" BorderBrush="#7A5123" BorderThickness="1" CornerRadius="2" 
-							Height="70" Margin="0,25,0,0" HorizontalAlignment="Stretch">
-										<Grid Margin="10,0">
-											<Grid.ColumnDefinitions>
-												<ColumnDefinition Width="*"/>
-												<ColumnDefinition Width="Auto"/>
-											</Grid.ColumnDefinitions>
-
-											<TextBlock x:Name="IntervalResult" Grid.Column="0" Text="0 д 0 ч 0 мин 0 с" FontSize="20" FontWeight="SemiBold" Foreground="#7A5123" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-											<Button Name="IntervalCopy" Grid.Column="1" Style="{StaticResource IconButtonStyle}" Click="CopyFullResult_Click" ToolTip="Copy" VerticalAlignment="Center"/>
-										</Grid>
-									</Border>
-								</Grid>
-							</ScrollViewer>
-						</Border>
+						<!-- Кнопка "Из буфера"  -->
+						<Button Grid.Column="6" 
+								x:Name="FromBufferInterval" 
+								Content="Из буфера" 
+								Style="{StaticResource IntervalButtonStyle}" 
+								Click="FromBuffer4_Click" 
+								Height="45"
+								HorizontalAlignment="Stretch" 
+								VerticalAlignment="Center"/>
 					</Grid>
-				</TabItem>
 
-				<!-- Вкладка 5: Деление  -->
-				<TabItem>
-					<Grid Background="#F3EFE9">
-						<!-- Коралловая карточка (#E86E67) -->
-						<Border Background="#E86E67" CornerRadius="8" Padding="15" Margin="1">
-							<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-								<Grid KeyboardNavigation.TabNavigation="Cycle">
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="0.22*"/>
-										<ColumnDefinition Width="0.04*"/>
-										<ColumnDefinition Width="0.22*"/>
-										<ColumnDefinition Width="0.04*"/>
-										<ColumnDefinition Width="0.22*"/>
-										<ColumnDefinition Width="0.04*"/>
-										<ColumnDefinition Width="0.22*"/>
-									</Grid.ColumnDefinitions>
-									<Grid.RowDefinitions>
-										<RowDefinition Height="Auto"/>
-										<!-- Строка 0: Заголовок -->
-										<RowDefinition Height="Auto"/>
-										<!-- Строка 1: Поля ввода д ч мин с -->
-										<RowDefinition Height="Auto"/>
-										<!-- Строка 2: Число-множитель/делитель -->
-										<RowDefinition Height="Auto"/>
-										<!-- Строка 3: Кнопки x, /, Вставить, Очистить -->
-										<RowDefinition Height="Auto"/>
-										<!-- Строка 4: Блок результата -->
-									</Grid.RowDefinitions>
+					<!-- СТРОКА 1: ПОЛЯ ВВОДА -->
+					<TextBox Grid.Row="1" Grid.Column="0" x:Name="DaysInterval" Text="д" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="1" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
-									<!-- Ресурсы стилей для элементов управления Набора 5 -->
-									<Grid.Resources>
-										<!-- 1. Основной стиль для простых однострочных кнопок -->
-										<Style x:Key="DivIntervalButtonStyle" TargetType="Button">
-											<Setter Property="FontSize" Value="14"/>
-											<Setter Property="Cursor" Value="Hand"/>
-											<Setter Property="IsTabStop" Value="False"/>
-											<Setter Property="Template">
-												<Setter.Value>
-													<ControlTemplate TargetType="Button">
-														<Border x:Name="ButtonBorder" 
+					<TextBox Grid.Row="1" Grid.Column="2" x:Name="HoursInterval" Text="ч" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="2" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+
+					<TextBox Grid.Row="1" Grid.Column="4" x:Name="MinutesInterval" Text="мин" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="3" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+
+					<TextBox Grid.Row="1" Grid.Column="6" x:Name="SecondsInterval" Text="с" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="4" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+				
+					<!-- СТРОКА 2: Кнопки -->
+					<Button Grid.Row="2" Grid.Column="0" Margin="0,25,0,0" Content="+" Style="{StaticResource MathButtonStyle}" Click="AddInterval_Click" TabIndex="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+					<Button Grid.Row="2" Grid.Column="2" Margin="0,25,0,0" Content="-" Style="{StaticResource MathButtonStyle}" Click="SubtractInterval_Click" TabIndex="6"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+					<Button Grid.Row="2" Grid.Column="6" Margin="0,25,0,0" Content="Очистить" Style="{StaticResource IntervalButtonStyle}" Click="ClearResult_Click" Height="45" Padding="15,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+					
+					<!-- СТРОКА 3: БЛОК ВЫВОДА РЕЗУЛЬТАТА -->
+					<Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="8" x:Name="IntervalResultBorder" 
+			Background="Transparent" BorderBrush="#7A5123" BorderThickness="1" CornerRadius="2" 
+			Height="70" Margin="0,25,0,0" HorizontalAlignment="Stretch">
+						<Grid Margin="10,0">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="Auto"/>
+							</Grid.ColumnDefinitions>
+
+							<TextBlock x:Name="IntervalResult" Grid.Column="0" Text="0 д 0 ч 0 мин 0 с" FontSize="20" FontWeight="SemiBold" Foreground="#7A5123" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+							<Button Name="IntervalCopy" Grid.Column="1" Style="{StaticResource IconButtonStyle}" Click="CopyFullResult_Click" ToolTip="Copy" VerticalAlignment="Center"/>
+						</Grid>
+					</Border>
+				</Grid>
+			</ScrollViewer>
+		</Border>
+	</Grid>
+</TabItem>
+
+<!-- Вкладка 5: Деление  -->
+<TabItem>
+	<Grid Background="#F3EFE9">
+
+		<Border Background="#E86E67" CornerRadius="8" Padding="15" Margin="1">
+			<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+				<Grid KeyboardNavigation.TabNavigation="Cycle">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="0.22*"/>
+						<ColumnDefinition Width="0.04*"/>
+						<ColumnDefinition Width="0.22*"/>
+						<ColumnDefinition Width="0.04*"/>
+						<ColumnDefinition Width="0.22*"/>
+						<ColumnDefinition Width="0.04*"/>
+						<ColumnDefinition Width="0.22*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<!-- Строка 0: Заголовок -->
+						<RowDefinition Height="Auto"/>
+						<!-- Строка 1: Поля ввода д ч мин с -->
+						<RowDefinition Height="Auto"/>
+						<!-- Строка 2: Число-множитель/делитель -->
+						<RowDefinition Height="Auto"/>
+						<!-- Строка 3: Кнопки x, /, Вставить, Очистить -->
+						<RowDefinition Height="Auto"/>
+						<!-- Строка 4: Блок результата -->
+					</Grid.RowDefinitions>
+
+					<!-- Ресурсы стилей для элементов управления Набора 5 -->
+					<Grid.Resources>
+						<!-- 1. Основной стиль для простых однострочных кнопок -->
+						<Style x:Key="DivIntervalButtonStyle" TargetType="Button">
+							<Setter Property="FontSize" Value="14"/>
+							<Setter Property="Cursor" Value="Hand"/>
+							<Setter Property="IsTabStop" Value="False"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="Button">
+										<Border x:Name="ButtonBorder" 
 												Background="#6E2B27" 
 												BorderBrush="#6E2B27" 
 												BorderThickness="1" 
 												Padding="5,0" 
 												CornerRadius="2">
-															<ContentPresenter x:Name="ButtonContent" 
-															  HorizontalAlignment="Center" 
-															  VerticalAlignment="Center" 
-															  TextBlock.Foreground="#E86E67"/>
-														</Border>
-														<ControlTemplate.Triggers>
-															<Trigger Property="IsMouseOver" Value="True">
-																<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#E86E67"/>
-																<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#6E2B27"/>
-																<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#6E2B27"/>
-															</Trigger>
-														</ControlTemplate.Triggers>
-													</ControlTemplate>
-												</Setter.Value>
-											</Setter>
-										</Style>
+											<ContentPresenter x:Name="ButtonContent" 
+												HorizontalAlignment="Center" 
+												VerticalAlignment="Center" 
+												TextBlock.Foreground="#E86E67"/>
+										</Border>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#E86E67"/>
+												<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#6E2B27"/>
+												<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#6E2B27"/>
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
 
-										<!-- 2. Математический стиль для кнопок х и / -->
-										<Style x:Key="DivMathButtonStyle" TargetType="Button" BasedOn="{StaticResource DivIntervalButtonStyle}">
-											<Setter Property="IsTabStop" Value="True"/>
-											<Setter Property="Template">
-												<Setter.Value>
-													<ControlTemplate TargetType="Button">
-														<Border x:Name="ButtonBorder" 
-												Background="#6E2B27" 
-												BorderBrush="#6E2B27" 
-												BorderThickness="1" 
-												Height="45" 
-												CornerRadius="2">
-															<ContentPresenter x:Name="ButtonContent" 
-															  HorizontalAlignment="Center" 
-															  VerticalAlignment="Center" 
-															  TextBlock.Foreground="#E86E67" 
-															  TextBlock.FontSize="24" 
-															  TextBlock.FontWeight="SemiBold"/>
-														</Border>
-														<ControlTemplate.Triggers>
-															<Trigger Property="IsMouseOver" Value="True">
-																<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#E86E67"/>
-																<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#6E2B27"/>
-																<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#6E2B27"/>
-															</Trigger>
-															<Trigger Property="IsFocused" Value="True">
-																<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#E86E67"/>
-																<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#6E2B27"/>
-																<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#6E2B27"/>
-															</Trigger>
-														</ControlTemplate.Triggers>
-													</ControlTemplate>
-												</Setter.Value>
-											</Setter>
-										</Style>
+						<!-- 2. стиль для кнопок х и / -->
+						<Style x:Key="DivMathButtonStyle" TargetType="Button" BasedOn="{StaticResource DivIntervalButtonStyle}">
+							<Setter Property="IsTabStop" Value="True"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="Button">
+										<Border x:Name="ButtonBorder" 
+								Background="#6E2B27" 
+								BorderBrush="#6E2B27" 
+								BorderThickness="1" 
+								Height="45" 
+								CornerRadius="2">
+											<ContentPresenter x:Name="ButtonContent" 
+											  HorizontalAlignment="Center" 
+											  VerticalAlignment="Center" 
+											  TextBlock.Foreground="#E86E67" 
+											  TextBlock.FontSize="24" 
+											  TextBlock.FontWeight="SemiBold"/>
+										</Border>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#E86E67"/>
+												<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#6E2B27"/>
+												<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#6E2B27"/>
+											</Trigger>
+											<Trigger Property="IsFocused" Value="True">
+												<Setter TargetName="ButtonBorder" Property="Border.Background" Value="#E86E67"/>
+												<Setter TargetName="ButtonContent" Property="TextBlock.Foreground" Value="#6E2B27"/>
+												<Setter TargetName="ButtonBorder" Property="Border.BorderBrush" Value="#6E2B27"/>
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
 
-										<!-- 3. Иконка копирования результата -->
-										<Style x:Key="DivIconButtonStyle" TargetType="Button">
-											<Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-											<Setter Property="Content" Value="&#xE8C8;"/>
-											<Setter Property="FontSize" Value="14"/>
-											<Setter Property="Width" Value="36"/>
-											<Setter Property="Height" Value="36"/>
-											<Setter Property="Padding" Value="0"/>
-											<Setter Property="IsTabStop" Value="False"/>
-											<Setter Property="Cursor" Value="Hand"/>
-											<Setter Property="Template">
-												<Setter.Value>
-													<ControlTemplate TargetType="Button">
-														<Border x:Name="ButtonBorder" Background="Transparent" CornerRadius="2">
-															<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="#6E2B27"/>
-														</Border>
-														<ControlTemplate.Triggers>
-															<Trigger Property="IsMouseOver" Value="True">
-																<Setter TargetName="ButtonBorder" Property="Background" Value="#E3DDD3"/>
-															</Trigger>
-														</ControlTemplate.Triggers>
-													</ControlTemplate>
-												</Setter.Value>
-											</Setter>
-										</Style>
-									</Grid.Resources>
+						<!-- 3. Иконка копирования результата -->
+						<Style x:Key="DivIconButtonStyle" TargetType="Button">
+							<Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+							<Setter Property="Content" Value="&#xE8C8;"/>
+							<Setter Property="FontSize" Value="14"/>
+							<Setter Property="Width" Value="36"/>
+							<Setter Property="Height" Value="36"/>
+							<Setter Property="Padding" Value="0"/>
+							<Setter Property="IsTabStop" Value="False"/>
+							<Setter Property="Cursor" Value="Hand"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="Button">
+										<Border x:Name="ButtonBorder" Background="Transparent" CornerRadius="2">
+											<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="#6E2B27"/>
+										</Border>
+										<ControlTemplate.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter TargetName="ButtonBorder" Property="Background" Value="#E3DDD3"/>
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</Grid.Resources>
 
-									<!-- Строка 0 -->
-									<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Margin="0,0,0,20">
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="0.22*"/>
-											<ColumnDefinition Width="0.04*"/>
-											<ColumnDefinition Width="0.22*"/>
-											<ColumnDefinition Width="0.04*"/>
-											<ColumnDefinition Width="0.22*"/>
-											<ColumnDefinition Width="0.04*"/>
-											<ColumnDefinition Width="0.22*"/>
-										</Grid.ColumnDefinitions>
+					<!-- Строка 0 -->
+					<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Margin="0,0,0,20">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="0.22*"/>
+							<ColumnDefinition Width="0.04*"/>
+							<ColumnDefinition Width="0.22*"/>
+							<ColumnDefinition Width="0.04*"/>
+							<ColumnDefinition Width="0.22*"/>
+							<ColumnDefinition Width="0.04*"/>
+							<ColumnDefinition Width="0.22*"/>
+						</Grid.ColumnDefinitions>
 
-										<!-- Заголовок страницы -->
-										<TextBlock Grid.Column="0" Grid.ColumnSpan="5" 
-												Text="Умножение и деление интервалов" 
-												FontSize="20" FontWeight="SemiBold" 
-												Foreground="#6E2B27" 
-												VerticalAlignment="Center"/>
+						<!-- Заголовок страницы -->
+						<TextBlock Grid.Column="0" Grid.ColumnSpan="5" 
+								Text="Умножение и деление интервалов" 
+								FontSize="20" FontWeight="SemiBold" 
+								Foreground="#6E2B27" 
+								VerticalAlignment="Center"/>
 
-										<!-- Кнопка "Из буфера" -->
-										<Button Grid.Column="6" 
-												x:Name="FromBufferDiv" 
-												Content="Из буфера" 
-												Style="{StaticResource DivIntervalButtonStyle}" 
-												Click="FromBuffer4_Click" 
-												Height="45"
-												HorizontalAlignment="Stretch" 
-												VerticalAlignment="Center"/>
-									</Grid>
+						<!-- Кнопка "Из буфера" -->
+						<Button Grid.Column="6" 
+								x:Name="FromBufferDiv" 
+								Content="Из буфера" 
+								Style="{StaticResource DivIntervalButtonStyle}" 
+								Click="FromBuffer4_Click" 
+								Height="45"
+								HorizontalAlignment="Stretch" 
+								VerticalAlignment="Center"/>
+					</Grid>
 
-									<!-- СТРОКА 1: ПОЛЯ ВВОДА ИНТЕРВАЛОВ -->
-									<TextBox Grid.Row="1" Grid.Column="0" x:Name="DaysDiv" Text="д" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="1" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-									<TextBox Grid.Row="1" Grid.Column="2" x:Name="HoursDiv" Text="ч" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="2" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-									<TextBox Grid.Row="1" Grid.Column="4" x:Name="MinutesDiv" Text="мин" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="3" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-									<TextBox Grid.Row="1" Grid.Column="6" x:Name="SecondsDiv" Text="с" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="4" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+					<!-- СТРОКА 1: ПОЛЯ ВВОДА ИНТЕРВАЛОВ -->
+					<TextBox Grid.Row="1" Grid.Column="0" x:Name="DaysDiv" Text="д" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="1" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+					<TextBox Grid.Row="1" Grid.Column="2" x:Name="HoursDiv" Text="ч" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="2" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+					<TextBox Grid.Row="1" Grid.Column="4" x:Name="MinutesDiv" Text="мин" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="3" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+					<TextBox Grid.Row="1" Grid.Column="6" x:Name="SecondsDiv" Text="с" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="4" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
-									<!-- СТРОКА 2: ПОЛЕ ДЛЯ ВВОДА ЧИСЛА -->
-									<TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Text="Множитель / делитель (число):" FontSize="16" FontWeight="SemiBold" Foreground="#6E2B27" VerticalAlignment="Center" Margin="0,15,0,10"/>
-									<TextBox Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="3" x:Name="DivInputNumber" Text="1" FontSize="20" Height="40" Margin="0,15,0,10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="5" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+					<!-- СТРОКА 2: ПОЛЕ ДЛЯ ВВОДА ЧИСЛА -->
+					<TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Text="Множитель / делитель (число):" FontSize="16" FontWeight="SemiBold" Foreground="#6E2B27" VerticalAlignment="Center" Margin="0,15,0,10"/>
+					<TextBox Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="3" x:Name="DivInputNumber" Text="1" FontSize="20" Height="40" Margin="0,15,0,10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="5" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
-									<!-- СТРОКА 3: КНОПКИ УПРАВЛЕНИЯ -->
-									<Button Grid.Row="3" Grid.Column="0" Margin="0,15,0,0" x:Name="DivIntervalMultiply" Content="×" Style="{StaticResource DivMathButtonStyle}" Click="DivIntervalMultiply_Click" TabIndex="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-									<Button Grid.Row="3" Grid.Column="2" Margin="0,15,0,0" x:Name="DivIntervalDivide" Content="/" Style="{StaticResource DivMathButtonStyle}" Click="DivIntervalDivide_Click" TabIndex="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-									<Button Grid.Row="3" Grid.Column="4" Margin="0,15,0,0" x:Name="DivIntervalPaste" Content="Вставить рез" Style="{StaticResource DivIntervalButtonStyle}" Click="DivIntervalPaste_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-									<Button Grid.Row="3" Grid.Column="6" Margin="0,15,0,0" x:Name="DivIntervalClear" Content="Очистить" Style="{StaticResource DivIntervalButtonStyle}" Click="DivIntervalClear_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+					<!-- СТРОКА 3: КНОПКИ УПРАВЛЕНИЯ -->
+					<Button Grid.Row="3" Grid.Column="0" Margin="0,15,0,0" x:Name="DivIntervalMultiply" Content="×" Style="{StaticResource DivMathButtonStyle}" Click="DivIntervalMultiply_Click" TabIndex="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+					<Button Grid.Row="3" Grid.Column="2" Margin="0,15,0,0" x:Name="DivIntervalDivide" Content="/" Style="{StaticResource DivMathButtonStyle}" Click="DivIntervalDivide_Click" TabIndex="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+					<Button Grid.Row="3" Grid.Column="4" Margin="0,15,0,0" x:Name="DivIntervalPaste" Content="Вставить рез" Style="{StaticResource DivIntervalButtonStyle}" Click="DivIntervalPaste_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+					<Button Grid.Row="3" Grid.Column="6" Margin="0,15,0,0" x:Name="DivIntervalClear" Content="Очистить" Style="{StaticResource DivIntervalButtonStyle}" Click="DivIntervalClear_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-									<!-- СТРОКА 4: ВЫВОД РЕЗУЛЬТАТА -->
-									<Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="7" x:Name="DivIntervalResultBorder" 
+					<!-- СТРОКА 4: ВЫВОД РЕЗУЛЬТАТА -->
+					<Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="7" x:Name="DivIntervalResultBorder" 
 							Background="Transparent" BorderBrush="#6E2B27" BorderThickness="1" CornerRadius="2" 
 							Height="70" Margin="0,25,0,0" HorizontalAlignment="Stretch">
-										<Grid Margin="10,0">
-											<Grid.ColumnDefinitions>
-												<ColumnDefinition Width="*"/>
-												<ColumnDefinition Width="Auto"/>
-											</Grid.ColumnDefinitions>
+						<Grid Margin="10,0">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="Auto"/>
+							</Grid.ColumnDefinitions>
 
-											<TextBlock x:Name="DivResult" Grid.Column="0" Text="0 д 0 ч 0 мин 0 с" FontSize="20" FontWeight="SemiBold" Foreground="#6E2B27" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-											<Button Name="DivCopy" Grid.Column="1" Style="{StaticResource DivIconButtonStyle}" Click="CopyFullResult_Click" ToolTip="Копировать результат" VerticalAlignment="Center"/>
-										</Grid>
-									</Border>
-								</Grid>
-							</ScrollViewer>
-						</Border>
-					</Grid>
-				</TabItem>
+							<TextBlock x:Name="DivResult" Grid.Column="0" Text="0 д 0 ч 0 мин 0 с" FontSize="20" FontWeight="SemiBold" Foreground="#6E2B27" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+							<Button Name="DivCopy" Grid.Column="1" Style="{StaticResource DivIconButtonStyle}" Click="CopyFullResult_Click" ToolTip="Копировать результат" VerticalAlignment="Center"/>
+						</Grid>
+					</Border>
+				</Grid>
+			</ScrollViewer>
+		</Border>
+	</Grid>
+</TabItem>
 
 
 
