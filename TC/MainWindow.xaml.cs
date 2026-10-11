@@ -54,8 +54,18 @@ namespace TC
 					}), System.Windows.Threading.DispatcherPriority.Input);
 				}
 			};
-
-
+			// если переключились на вкладку Деление
+			if (MainTabControl.SelectedIndex == 4)
+			{
+				Dispatcher.BeginInvoke(new Action(() =>
+				{
+					if (DivIntervalDays != null)
+					{
+						DivIntervalDays.Focus();
+						DivIntervalDays.SelectAll();
+					}
+				}), System.Windows.Threading.DispatcherPriority.Input);
+			}
 			if (MainTabControl != null) MainTabControl.SelectedIndex = 0;
 			if (FromUnit != null) FromUnit.SelectedIndex = 1; // Выбираем "Минуты" по умолчанию
 
@@ -132,7 +142,7 @@ namespace TC
 			DateTime endDateTime = DateTime.MinValue;
 
 			// ==========================================
-			// 1. РАЗНОСТЬ ДАТ (Ваша оригинальная логика)
+			// 1. РАЗНОСТЬ ДАТ 
 			// ==========================================
 			if (isDateValid)
 			{
@@ -143,7 +153,7 @@ namespace TC
 				startDateTime = start;
 				endDateTime = end;
 
-				// Ваша логика перестановки мест, если дата конца меньше даты начала
+				//  логика перестановки мест, если дата конца меньше даты начала
 				if (end < start)
 				{
 					DateTime tmp = end;
@@ -170,7 +180,7 @@ namespace TC
 				}
 				days = (end - tmpLoop).Days;
 
-				DateResultText.Text = $"{totalDays} д \n({years} лет, {months} мес, {days} д)";
+				DateResultText.Text = $"{totalDays} д \n({years} лет {months} мес {days} д)";
 			}
 			else
 			{
@@ -187,7 +197,8 @@ namespace TC
 				TimeSpan absTimeDiff = timeDiff.Duration();
 
 				// Выводим в формате: Всего часов и минут \n (чч:мм:сс)
-				TimeResultText.Text = $"{(int)absTimeDiff.TotalHours} ч. {absTimeDiff.Minutes} мин. \n({absTimeDiff:hh\\:mm\\:ss})";
+				TimeResultText.Text = $"{(int)absTimeDiff.TotalHours} ч {absTimeDiff.Minutes} мин \n({absTimeDiff:hh} ч {absTimeDiff:mm} мин {absTimeDiff:ss} с)";
+				//TimeResultText.Text = $"{(int)absTimeDiff.TotalHours} ч {absTimeDiff.Minutes} мин \n({absTimeDiff:hh\\:mm\\:ss})";
 			}
 			else
 			{
@@ -214,7 +225,8 @@ namespace TC
 				int totalDiffDays = totalDiff.Days;
 
 				// Форматируем остаток времени (часы, минуты, секунды)
-				DifferenceResult.Text = $"{totalDiffDays} дн. {totalDiff:hh\\:mm\\:ss}";
+				//DifferenceResult.Text = $"{totalDiffDays} д {totalDiff:hh\\:mm\\:ss}";
+				DifferenceResult.Text = $"{totalDiffDays} д {totalDiff:hh} ч {totalDiff:mm} мин {totalDiff:ss} с";
 			}
 			else
 			{
@@ -451,31 +463,145 @@ namespace TC
 			ResetFocusToDays();
 		}
 
-		// Копирование строки формата в буфер
+		// Копирование результата в буфер
 		private void CopyFullResult_Click(object sender, RoutedEventArgs e)
 		{
-			//if (IntervalResult != null)
-			//try
-			//{
-			//	Clipboard.SetText(IntervalResult.Text);
-			//}
-			//catch (System.Runtime.InteropServices.ExternalException) { }
 			try
 			{
-				if (sender is Button clickedButton)
+				if (!(sender is Button clickedButton)) return;
+
+				string buttonName = clickedButton.Name;
+				string targetControlName = buttonName.Substring(0, buttonName.Length - 4)+"Result"; // Преобразовать xxxCopy to xxxResult
+
+				object targetControl = this.FindName(targetControlName);
+				if (targetControl == null) return;
+
+				string rawText = string.Empty;
+
+				// 1. Получаем сырой текст из элемента управления
+				if (targetControl is TextBlock textBlock)
 				{
-					string buttonName = clickedButton.Name;
-					string textBlockName = buttonName.Substring(0, buttonName.Length - 4) + "Result";
-
-					if (this.FindName(textBlockName) is TextBlock resultTextBlock)
+					rawText = textBlock.Text;
+				}
+				else if (targetControl is TextBox textBox)
+				{
+					rawText = textBox.Text;
+				}
+				else if (targetControl is DatePicker datePicker)
+				{
+					if (datePicker.SelectedDate != null)
 					{
+						Clipboard.SetText(datePicker.SelectedDate.Value.ToString("d"));
+					}
+					return;
+				}
 
-						Clipboard.SetText(resultTextBlock.Text);
+				if (string.IsNullOrWhiteSpace(rawText)) return;
+
+				// строку к нижнему регистру, заменяя все пробелы на обычные
+				string cleanText = rawText.Replace("\u00A0", " ").Replace("\r", " ").Replace("\n", " ").ToLower().Trim();
+
+				// Константы перевода единиц времени в секунды
+				double secondsInMinute = 60.0;
+				double secondsInHour = 3600.0;
+				double secondsInDay = 86400.0;
+				double secondsInMonth = 2592000.0; // 30 дней
+				double secondsInYear = 31536000.0; // 365 дней
+
+				double totalSeconds = 0;
+				bool parsedAnyUnit = false;
+
+				// Разбираем строку по словам/блокам через пробелы
+				string[] tokens = cleanText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+				string currentNumberStr = "";
+
+				for (int i = 0; i < tokens.Length; i++)
+				{
+					string token = tokens[i].Trim();
+					if (string.IsNullOrEmpty(token)) continue;
+
+					// Если токен состоит только из цифр (или цифры с запятой/точкой) — это часть числа (или разряд)
+					if (long.TryParse(token.Replace(",", "").Replace(".", ""), out _))
+					{
+						currentNumberStr += token; // Склеиваем разряды (например "4" + "227" + "972")
+						continue;
 					}
 
+					// Если токен содержит буквы, проверяем, идет ли перед ним накопленное число
+					// Либо число склеено с буквой (например "33д")
+					string numPart = "";
+					string letterPart = "";
+
+					// Разделяем токен на цифры и буквы, если они склеены
+					foreach (char c in token)
+					{
+						if (char.IsDigit(c)) numPart += c;
+						else letterPart += c;
+					}
+
+					if (!string.IsNullOrEmpty(numPart))
+					{
+						currentNumberStr = numPart;
+					}
+
+					if (!string.IsNullOrEmpty(currentNumberStr) && !string.IsNullOrEmpty(letterPart))
+					{
+						if (long.TryParse(currentNumberStr, out long value))
+						{
+							// Проверяем метки времени
+							if (letterPart.StartsWith("лет") || letterPart.StartsWith("год") || letterPart == "г" || letterPart == "г.")
+							{
+								totalSeconds += value * secondsInYear;
+								parsedAnyUnit = true;
+							}
+							else if (letterPart.StartsWith("мес"))
+							{
+								totalSeconds += value * secondsInMonth;
+								parsedAnyUnit = true;
+							}
+							else if (letterPart.StartsWith("дн") || letterPart == "д" || letterPart == "д." || letterPart.StartsWith("ден"))
+							{
+								totalSeconds += value * secondsInDay;
+								parsedAnyUnit = true;
+							}
+							else if (letterPart == "ч" || letterPart == "ч." || letterPart.StartsWith("час"))
+							{
+								totalSeconds += value * secondsInHour;
+								parsedAnyUnit = true;
+							}
+							else if (letterPart.StartsWith("мин"))
+							{
+								totalSeconds += value * secondsInMinute;
+								parsedAnyUnit = true;
+							}
+							else if (letterPart == "с" || letterPart == "с." || letterPart.StartsWith("сек"))
+							{
+								totalSeconds += value;
+								parsedAnyUnit = true;
+							}
+						}
+						currentNumberStr = ""; // Сбрасываем для следующей пары
+					}
+				}
+
+				// 4. Финальная запись в буфер
+				if (!parsedAnyUnit)
+				{
+					// Если меток времени вообще нет (чистое число из полей Конвертера вроде "13333333")
+					string pureDigits = cleanText.Replace(" ", "").Replace(",", ".");
+					Clipboard.SetText(pureDigits);
+				}
+				else
+				{
+					long finalSeconds = (long)Math.Round(totalSeconds);
+					Clipboard.SetText(finalSeconds.ToString());
 				}
 			}
-			catch (System.Runtime.InteropServices.ExternalException) { }
+			catch (System.Runtime.InteropServices.ExternalException)
+			{
+				// Защита буфера обмена
+			}
 		}
 
 		// ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ СЧЕТА И ФОКУСА
@@ -874,6 +1000,122 @@ namespace TC
 				MessageBox.Show("Результат вычислений выходит за рамки допустимого календаря (минимальная дата: 01.01.0001, максимальная: 31.12.9999).", "Выход за границы", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 		}
-	
+		// =========================================================================
+		// ЛОГИКА ДЛЯ ВКЛАДКИ 5 (УМНОЖЕНИЕ И ДЕЛЕНИЕ ИНТЕРВАЛОВ)
+		// =========================================================================
+
+		// Переменная для сохранения общего количества секунд результата Вкладки 5
+		private long divTotalSeconds = 0;
+
+		// Кнопка УМНОЖИТЬ (×)
+		private void DivIntervalMultiply_Click(object sender, RoutedEventArgs e)
+		{
+			ExecuteIntervalMath(true);
+		}
+
+		// Кнопка ДЕЛЕНИЕ (/)
+		private void DivIntervalDivide_Click(object sender, RoutedEventArgs e)
+		{
+			ExecuteIntervalMath(false);
+		}
+
+		// Кнопка ВСТАВИТЬ РЕЗУЛЬТАТ
+		private void DivIntervalPaste_Click(object sender, RoutedEventArgs e)
+		{
+			if (DivIntervalDays == null || DivResult == null) return;
+
+			long tempSeconds = divTotalSeconds;
+
+			long days = tempSeconds / 86400;
+			tempSeconds %= 86400;
+
+			long hours = tempSeconds / 3600;
+			tempSeconds %= 3600;
+
+			long minutes = tempSeconds / 60;
+			long seconds = tempSeconds % 60;
+
+			// Раскладываем секунды обратно по полям ввода
+			DivIntervalDays.Text = days > 0 ? days.ToString() : "д";
+			DivIntervalHours.Text = hours > 0 ? hours.ToString() : "ч";
+			DivIntervalMinutes.Text = minutes > 0 ? minutes.ToString() : "мин";
+			DivIntervalSeconds.Text = seconds > 0 ? seconds.ToString() : "с";
+
+			// Возвращаем делитель/множитель в состояние "1"
+			if (DivInputNumber != null) DivInputNumber.Text = "1";
+
+			// Переводим фокус на поле ввода числа модификатора
+			if (DivInputNumber != null)
+			{
+				DivInputNumber.Focus();
+				DivInputNumber.SelectAll();
+			}
+		}
+
+		// Кнопка ОЧИСТИТЬ ВСЁ
+		private void DivIntervalClear_Click(object sender, RoutedEventArgs e)
+		{
+			divTotalSeconds = 0;
+
+			if (DivResult != null) DivResult.Text = "0 д 0 ч 0 мин 0 с";
+			if (DivIntervalDays != null) DivIntervalDays.Text = "д";
+			if (DivIntervalHours != null) DivIntervalHours.Text = "ч";
+			if (DivIntervalMinutes != null) DivIntervalMinutes.Text = "мин";
+			if (DivIntervalSeconds != null) DivIntervalSeconds.Text = "с";
+			if (DivInputNumber != null) DivInputNumber.Text = "1";
+
+			if (DivIntervalDays != null)
+			{
+				DivIntervalDays.Focus();
+				DivIntervalDays.SelectAll();
+			}
+		}
+
+		// Единый метод вычисления для Вкладки 5
+		private void ExecuteIntervalMath(bool isMultiplication)
+		{
+			if (DivIntervalDays == null || DivInputNumber == null || DivResult == null) return;
+
+			// Парсим исходный временной интервал
+			long.TryParse(DivIntervalDays.Text, out long d);
+			long.TryParse(DivIntervalHours.Text, out long h);
+			long.TryParse(DivIntervalMinutes.Text, out long m);
+			long.TryParse(DivIntervalSeconds.Text, out long s);
+
+			long inputSeconds = s + (m * 60) + (h * 3600) + (d * 86400);
+
+			// Парсим число-модификатор (множитель или делитель)
+			if (!double.TryParse(DivInputNumber.Text, out double factor) || factor <= 0)
+			{
+				MessageBox.Show("Пожалуйста, введите корректное положительное число больше нуля.", "Ошибка ввода", MessageBoxButton.OK, MessageBoxImage.Warning);
+				return;
+			}
+
+			// Рассчитываем итоговые секунды
+			if (isMultiplication)
+			{
+				divTotalSeconds = (long)Math.Round(inputSeconds * factor);
+			}
+			else
+			{
+				divTotalSeconds = (long)Math.Round(inputSeconds / factor);
+			}
+
+			if (divTotalSeconds < 0) divTotalSeconds = 0;
+
+			// Переводим секунды в красивый читаемый формат
+			long tempSeconds = divTotalSeconds;
+
+			long resDays = tempSeconds / 86400;
+			tempSeconds %= 86400;
+
+			long resHours = tempSeconds / 3600;
+			tempSeconds %= 3600;
+
+			long resMinutes = tempSeconds / 60;
+			long resSeconds = tempSeconds % 60;
+
+			DivResult.Text = $"{resDays} д {resHours} ч {resMinutes} мин {resSeconds} с";
+		}
 	} // MainWindow
 } //  TC
