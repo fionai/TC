@@ -20,7 +20,7 @@ namespace TC
 
 			MainTabControl.SelectionChanged += (s, e) =>
 			{
-				//Если переключились на вкладку Разность дат
+				//Если переключились на вкладку Разность
 				if (MainTabControl.SelectedIndex == 0)
 				{
 					Dispatcher.BeginInvoke(new Action(() =>
@@ -124,17 +124,16 @@ namespace TC
 				string bufferText = Clipboard.GetText().Trim();
 				if (string.IsNullOrWhiteSpace(bufferText)) return;
 
-				// Заменяем запятую на точку для поддержки любых стандартов ввода дробных чисел
+				// Заменяем запятую на точку
 				bufferText = bufferText.Replace(",", ".");
 
-				// 2. Валидация: проверяем, что в буфере находится корректное число
+				// Если в буфере не число 
 				if (!double.TryParse(bufferText, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double parsedDouble))
 				{
-					// Если в буфере не число (например, текст или буквы) — тихо прерываем выполнение
 					return;
 				}
 
-				// 3. Отбрасываем дробные знаки (получаем чистое целое число секунд)
+				// 3. Отбрасываем дробные знаки
 				long totalSeconds = (long)Math.Truncate(parsedDouble);
 				if (totalSeconds < 0) totalSeconds = 0; // Защита от отрицательного времени
 
@@ -156,29 +155,40 @@ namespace TC
 					TextBox targetMinutes = null;
 					TextBox targetSeconds = null;
 
-					switch (clickedButton.Name)
-					{
-						case "FromBufferAdd": // Вкладка 2
-							targetDays = this.FindName("DaysAdd") as TextBox;
-							targetHours = this.FindName("HoursAdd") as TextBox;
-							targetMinutes = this.FindName("MinutesAdd") as TextBox;
-							targetSeconds = this.FindName("SecondsAdd") as TextBox;
-							break;
+					string buttonName = clickedButton.Name;
+					string dname = "Days" + buttonName.Substring(10);
+					string hname = "Hours"+buttonName.Substring(10);
+					string mname = "Minutes"+buttonName.Substring(10);
+					string sname = "Seconds"+buttonName.Substring(10);
 
-						case "FromBufferInterval": // Вкладка 4
-							targetDays = this.FindName("DaysInterval") as TextBox;
-							targetHours = this.FindName("HoursInterval") as TextBox;
-							targetMinutes = this.FindName("MinutesInterval") as TextBox;
-							targetSeconds = this.FindName("SecondsInterval") as TextBox;
-							break;
+					targetDays = this.FindName(dname) as TextBox;
+					targetHours = this.FindName(hname) as TextBox;
+					targetMinutes = this.FindName(mname) as TextBox;
+					targetSeconds = this.FindName(sname) as TextBox;
 
-						case "FromBufferDiv": // Вкладка 5
-							targetDays = this.FindName("DaysDiv") as TextBox;
-							targetHours = this.FindName("HoursDiv") as TextBox;
-							targetMinutes = this.FindName("MinutesDiv") as TextBox;
-							targetSeconds = this.FindName("SecondsDiv") as TextBox;
-							break;
-					}
+					//switch (clickedButton.Name)
+					//{
+					//	case "FromBufferAdd": // Вкладка 2
+					//		targetDays = this.FindName("DaysAdd") as TextBox;
+					//		targetHours = this.FindName("HoursAdd") as TextBox;
+					//		targetMinutes = this.FindName("MinutesAdd") as TextBox;
+					//		targetSeconds = this.FindName("SecondsAdd") as TextBox;
+					//		break;
+
+					//	case "FromBufferInterval": // Вкладка 4
+					//		targetDays = this.FindName("DaysInterval") as TextBox;
+					//		targetHours = this.FindName("HoursInterval") as TextBox;
+					//		targetMinutes = this.FindName("MinutesInterval") as TextBox;
+					//		targetSeconds = this.FindName("SecondsInterval") as TextBox;
+					//		break;
+
+					//	case "FromBufferDiv": // Вкладка 5
+					//		targetDays = this.FindName("DaysDiv") as TextBox;
+					//		targetHours = this.FindName("HoursDiv") as TextBox;
+					//		targetMinutes = this.FindName("MinutesDiv") as TextBox;
+					//		targetSeconds = this.FindName("SecondsDiv") as TextBox;
+					//		break;
+					//}
 
 					// Если группа полей успешно определена — заполняем их данными
 					if (targetDays != null && targetHours != null && targetMinutes != null && targetSeconds != null)
@@ -189,7 +199,7 @@ namespace TC
 						targetMinutes.Text = minutes > 0 ? minutes.ToString() : "мин";
 						targetSeconds.Text = seconds > 0 ? seconds.ToString() : "с";
 
-						// 6. Переносим фокус ввода на текстовое поле СЕКУНД текущей вкладки и выделяем текст
+						// 6. Перенос фокуса ввода на поле СЕКУНД  и выделение текста
 						targetSeconds.Focus();
 						targetSeconds.SelectAll();
 					}
@@ -344,7 +354,7 @@ namespace TC
 		{
 			// Проверяем, что все новые элементы интерфейса уже созданы
 			if (InputValue == null || FromUnit == null ||
-				ResultSeconds == null || ResultMinutes == null || ResultHours == null ||
+				ResultSeconds == null || ResultMinutes == null || ResultHours == null || ResultDays == null ||
 				ResultWeeks == null || ResultMonths == null || ResultYears == null ||
 				ConverterResult == null)
 			{
@@ -384,9 +394,10 @@ namespace TC
 				case 0: totalSeconds = inputNumber; break; // Секунды
 				case 1: totalSeconds = inputNumber * secondsInMinute; break; // Минуты
 				case 2: totalSeconds = inputNumber * secondsInHour; break; // Часы
-				case 3: totalSeconds = inputNumber * secondsInWeek; break; // Недели
-				case 4: totalSeconds = inputNumber * secondsInMonth; break; // Месяцы
-				case 5: totalSeconds = inputNumber * secondsInYear; break; // Годы
+				case 3: totalSeconds = inputNumber * secondsInDay; break; // Дни
+				case 4: totalSeconds = inputNumber * secondsInWeek; break; // Недели
+				case 5: totalSeconds = inputNumber * secondsInMonth; break; // Месяцы
+				case 6: totalSeconds = inputNumber * secondsInYear; break; // Годы
 				default: totalSeconds = inputNumber; break;
 			}
 
@@ -394,6 +405,7 @@ namespace TC
 			ResultSeconds.Text = totalSeconds.ToString("N0");
 			ResultMinutes.Text = (totalSeconds / secondsInMinute).ToString("N2");
 			ResultHours.Text = (totalSeconds / secondsInHour).ToString("N2");
+			ResultDays.Text = (totalSeconds / secondsInDay).ToString("N2");
 			ResultWeeks.Text = (totalSeconds / secondsInWeek).ToString("N2");
 			ResultMonths.Text = (totalSeconds / secondsInMonth).ToString("N2");
 			ResultYears.Text = (totalSeconds / secondsInYear).ToString("N2");
@@ -1024,7 +1036,18 @@ namespace TC
 			if (SecondsAdd != null) SecondsAdd.Text = "с";
 
 			// 3. Полностью очищаем нижние поля вывода результатов
-			if (AddResultDate != null) AddResultDate.SelectedDate = null;
+			if (AddResultDate != null)
+			{
+				AddResultDate.SelectedDate = null;
+
+				// Безопасный поиск текстового поля через шаблон элемента без VisualTreeHelper
+				var dptb = AddResultDate.Template.FindName("PART_TextBox", AddResultDate) as System.Windows.Controls.Primitives.DatePickerTextBox;
+				if (dptb != null)
+				{
+					dptb.Text = "Дата";
+				}
+			}
+
 			if (AddResultTime != null) AddResultTime.Text = "00:00:00";
 
 			// 4. Возвращаем фокус на Стартовую дату, как требует UI-логика
@@ -1128,9 +1151,6 @@ namespace TC
 			HoursDiv.Text = hours > 0 ? hours.ToString() : "ч";
 			MinutesDiv.Text = minutes > 0 ? minutes.ToString() : "мин";
 			SecondsDiv.Text = seconds > 0 ? seconds.ToString() : "с";
-
-			// Возвращаем делитель/множитель в состояние "1"
-			if (DivInputNumber != null) DivInputNumber.Text = "1";
 
 			// Переводим фокус на поле ввода числа модификатора
 			if (DivInputNumber != null)

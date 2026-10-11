@@ -413,8 +413,16 @@
 												VerticalAlignment="Center"/>
 									</Grid>
 
+		<!--Переход-->
 									<!-- Строка 1: Дата и Время -->
-									<DatePicker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" x:Name="StartDate" Margin="0,0,0,15" SelectedDateChanged="CalculateDateDifference" HorizontalAlignment="Stretch" FontSize="20" Loaded="StartDatePicker_Loaded" TabIndex="1" Background="#F3EFE9" BorderBrush="#56413C" Foreground="#3B5753"/>
+									<DatePicker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" x:Name="StartDate"
+												Margin="0,0,0,15" 
+												HorizontalAlignment="Stretch" FontSize="20" 
+												Background="#F3EFE9" BorderBrush="#56413C" Foreground="#3B5753"
+												TabIndex="1" 
+												SelectedDateChanged="CalculateDateDifference" 
+												Loaded="StartDatePicker_Loaded" 
+												/>
 									<TextBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" x:Name="StartTime" Margin="0,0,0,15" Text="Время" TextChanged="TimeTextBox_TextChanged" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="20" TabIndex="2" Background="#F3EFE9" BorderBrush="#56413C" Foreground="#3B5753" Padding="5,2" GotFocus="TimeTextBox_GotFocus" LostFocus="TimeTextBox_LostFocus" PreviewTextInput="TimeTextBox_PreviewTextInput" PreviewKeyDown="TimeTextBox_PreviewKeyDown" MouseDoubleClick="TimeTextBox_MouseDoubleClick" PreviewMouseLeftButtonDown="TimeTextBox_PreviewMouseLeftButtonDown"/>
 
 									<!-- Строка 2: Числовые поля (Дни, Часы, Минуты, Секунды) -->
@@ -431,7 +439,8 @@
 									<Button Grid.Row="3" Grid.Column="4" Margin="0,25,0,0" x:Name="AddIntervalPaste" Content="Вставить рез" Style="{StaticResource AddIntervalButtonStyle}" Click="AddIntervalPaste_Click" Height="45" Padding="15,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
 									<Button Grid.Row="3" Grid.Column="6" Margin="0,25,0,0" x:Name="AddIntervalClear" Content="Очистить" Style="{StaticResource AddIntervalButtonStyle}" Click="AddIntervalClear_Click" Height="45" Padding="15,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-									<!-- Строка 4: Блок вывода и кнопка копирования -->
+									
+									<!-- Строка 4: Блок вывода и кнопка копирования -->									
 									<Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="7" Margin="0,25,0,0">
 										<Grid.ColumnDefinitions>
 											<ColumnDefinition Width="0.22*"/>
@@ -444,9 +453,17 @@
 										</Grid.ColumnDefinitions>
 
 										<!-- Вывод результирующей ДАТЫ -->
+		<!--Переход-->
 										<DatePicker Grid.Column="0" Grid.ColumnSpan="3" x:Name="AddResultDate" 
-				IsEnabled="False" FontSize="20" HorizontalAlignment="Stretch"
-				Background="#F3EFE9" BorderBrush="#56413C" Foreground="#3B5753"/>
+            IsEnabled="False" FontSize="20" HorizontalAlignment="Stretch"
+            Background="#F3EFE9" BorderBrush="#56413C" Foreground="#3B5753">
+											<DatePicker.Resources>
+												<!-- Сценарий принудительного изменения текста внутренней подсказки -->
+												<Style TargetType="DatePickerTextBox">
+													<Setter Property="Text" Value="Дата"/>
+												</Style>
+											</DatePicker.Resources>
+										</DatePicker>
 
 										<!-- Вывод результирующего ВРЕМЕНИ -->
 										<TextBox Grid.Column="4" Grid.ColumnSpan="3" x:Name="AddResultTime" Text="00:00:00" 
@@ -516,12 +533,13 @@
 								<ComboBoxItem Content="Секунды" />
 								<ComboBoxItem Content="Минуты"/>
 								<ComboBoxItem Content="Часы"/>
+								<ComboBoxItem Content="Дни"/>
 								<ComboBoxItem Content="Недели"/>
 								<ComboBoxItem Content="Месяцы"/>
 								<ComboBoxItem Content="Годы"/>
 							</ComboBox>
 
-											<TextBox x:Name="InputValue" Padding="8" FontSize="20" TextWrapping="NoWrap" 
+								<TextBox x:Name="InputValue" Padding="8" FontSize="20" TextWrapping="NoWrap" 
 													 AcceptsReturn="False" TextChanged="ConvertTime" Background="#F3EFE9" 
 													 BorderBrush="#CBBF92" Foreground="#5B4F23" 
 													 PreviewTextInput="InputValue_PreviewTextInput"/>
@@ -547,32 +565,37 @@
 									<RowDefinition Height="Auto" MinHeight="35"/>
 									<RowDefinition Height="Auto" MinHeight="35"/>
 									<RowDefinition Height="Auto" MinHeight="35"/>
+									<RowDefinition Height="Auto" MinHeight="35"/>
 								</Grid.RowDefinitions>
 
 								<!-- 3. СОДЕРЖИМОЕ ТАБЛИЦЫ  -->
 								<!-- Секунды -->
 								<TextBlock Grid.Row="0" Grid.Column="0" Text="Секунды:" FontSize="20" VerticalAlignment="Top" Margin="0,5,10,0" Foreground="#5B4F23"/>
-								<TextBlock Grid.Row="0" Grid.Column="1" x:Name="ResultSeconds" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,5,0" TextWrapping="Wrap"/>
+								<TextBlock Grid.Row="0" Grid.Column="1" x:Name="ResultSeconds" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,0,0" TextWrapping="Wrap"/>
 
 								<!-- Минуты -->
 								<TextBlock Grid.Row="1" Grid.Column="0" Text="Минуты:" FontSize="20" VerticalAlignment="Top" Margin="0,5,10,0" Foreground="#5B4F23"/>
-								<TextBlock Grid.Row="1" Grid.Column="1" x:Name="ResultMinutes" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,5,0" TextWrapping="Wrap"/>
+								<TextBlock Grid.Row="1" Grid.Column="1" x:Name="ResultMinutes" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,0,0" TextWrapping="Wrap"/>
 
 								<!-- Часы -->
 								<TextBlock Grid.Row="2" Grid.Column="0" Text="Часы:" FontSize="20" VerticalAlignment="Top" Margin="0,5,10,0" Foreground="#5B4F23"/>
-								<TextBlock Grid.Row="2" Grid.Column="1" x:Name="ResultHours" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,5,0" TextWrapping="Wrap"/>
+								<TextBlock Grid.Row="2" Grid.Column="1" x:Name="ResultHours" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,0,0" TextWrapping="Wrap"/>
+								
+								<!-- Дни -->
+								<TextBlock Grid.Row="3" Grid.Column="0" Text="Дни:" FontSize="20" VerticalAlignment="Top" Margin="0,5,10,0" Foreground="#5B4F23"/>
+								<TextBlock Grid.Row="3" Grid.Column="1" x:Name="ResultDays" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,0,0" TextWrapping="Wrap"/>
 
 								<!-- Недели -->
-								<TextBlock Grid.Row="3" Grid.Column="0" Text="Недели:" FontSize="20" VerticalAlignment="Top" Margin="0,5,10,0" Foreground="#5B4F23"/>
-								<TextBlock Grid.Row="3" Grid.Column="1" x:Name="ResultWeeks" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,5,0" TextWrapping="Wrap"/>
+								<TextBlock Grid.Row="4" Grid.Column="0" Text="Недели:" FontSize="20" VerticalAlignment="Top" Margin="0,5,10,0" Foreground="#5B4F23"/>
+								<TextBlock Grid.Row="4" Grid.Column="1" x:Name="ResultWeeks" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,0,0" TextWrapping="Wrap"/>
 
 								<!-- Месяцы -->
-								<TextBlock Grid.Row="4" Grid.Column="0" Text="Месяцы:" FontSize="20" VerticalAlignment="Top" Margin="0,5,10,0" Foreground="#5B4F23"/>
-								<TextBlock Grid.Row="4" Grid.Column="1" x:Name="ResultMonths" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,5,0" TextWrapping="Wrap"/>
+								<TextBlock Grid.Row="5" Grid.Column="0" Text="Месяцы:" FontSize="20" VerticalAlignment="Top" Margin="0,5,10,0" Foreground="#5B4F23"/>
+								<TextBlock Grid.Row="5" Grid.Column="1" x:Name="ResultMonths" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,0,0" TextWrapping="Wrap"/>
 
-								<!-- Годы -->
-								<TextBlock Grid.Row="5" Grid.Column="0" Text="Годы:" FontSize="20" VerticalAlignment="Top" Margin="0,5,10,0" Foreground="#5B4F23"/>
-								<TextBlock Grid.Row="5" Grid.Column="1" x:Name="ResultYears" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,5,0" TextWrapping="Wrap"/>
+												<!-- Годы -->
+								<TextBlock Grid.Row="6" Grid.Column="0" Text="Годы:" FontSize="20" VerticalAlignment="Top" Margin="0,5,10,0" Foreground="#5B4F23"/>
+								<TextBlock Grid.Row="6" Grid.Column="1" x:Name="ResultYears" Text="0" FontSize="20" FontWeight="SemiBold" Foreground="#5B4F23" VerticalAlignment="Top" Margin="0,3,0,0" TextWrapping="Wrap"/>
 							</Grid>
 
 											<!-- Разделитель -->
