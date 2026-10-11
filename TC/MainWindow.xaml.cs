@@ -46,10 +46,10 @@ namespace TC
 				{
 					Dispatcher.BeginInvoke(new Action(() =>
 					{
-						if (InputIntervalDays != null)
+						if (DaysInterval != null)
 						{
-							InputIntervalDays.Focus();
-							InputIntervalDays.SelectAll();
+							DaysInterval.Focus();
+							DaysInterval.SelectAll();
 						}
 					}), System.Windows.Threading.DispatcherPriority.Input);
 				}
@@ -59,10 +59,10 @@ namespace TC
 			{
 				Dispatcher.BeginInvoke(new Action(() =>
 				{
-					if (DivIntervalDays != null)
+					if (DaysDiv != null)
 					{
-						DivIntervalDays.Focus();
-						DivIntervalDays.SelectAll();
+						DaysDiv.Focus();
+						DaysDiv.SelectAll();
 					}
 				}), System.Windows.Threading.DispatcherPriority.Input);
 			}
@@ -110,6 +110,94 @@ namespace TC
 
 				// Сбрасываем выделение в меню, чтобы по нему можно было кликнуть повторно
 				MenuListBox.SelectedIndex = -1;
+			}
+		}
+
+		//Обработчик кнопки Вставить из буфера
+		private void FromBuffer4_Click(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				// 1. Проверяем наличие текстовых данных в буфере обмена
+				if (!Clipboard.ContainsText()) return;
+
+				string bufferText = Clipboard.GetText().Trim();
+				if (string.IsNullOrWhiteSpace(bufferText)) return;
+
+				// Заменяем запятую на точку для поддержки любых стандартов ввода дробных чисел
+				bufferText = bufferText.Replace(",", ".");
+
+				// 2. Валидация: проверяем, что в буфере находится корректное число
+				if (!double.TryParse(bufferText, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double parsedDouble))
+				{
+					// Если в буфере не число (например, текст или буквы) — тихо прерываем выполнение
+					return;
+				}
+
+				// 3. Отбрасываем дробные знаки (получаем чистое целое число секунд)
+				long totalSeconds = (long)Math.Truncate(parsedDouble);
+				if (totalSeconds < 0) totalSeconds = 0; // Защита от отрицательного времени
+
+				// 4. Математический перевод секунд в дни, часы, минуты и секунды
+				long days = totalSeconds / 86400;
+				long remainder = totalSeconds % 86400;
+
+				long hours = remainder / 3600;
+				remainder %= 3600;
+
+				long minutes = remainder / 60;
+				long seconds = remainder % 60;
+
+				// 5. Определяем, какая именно кнопка была нажата, и заполняем соответствующие поля
+				if (sender is Button clickedButton)
+				{
+					TextBox targetDays = null;
+					TextBox targetHours = null;
+					TextBox targetMinutes = null;
+					TextBox targetSeconds = null;
+
+					switch (clickedButton.Name)
+					{
+						case "FromBufferAdd": // Вкладка 2
+							targetDays = this.FindName("DaysAdd") as TextBox;
+							targetHours = this.FindName("HoursAdd") as TextBox;
+							targetMinutes = this.FindName("MinutesAdd") as TextBox;
+							targetSeconds = this.FindName("SecondsAdd") as TextBox;
+							break;
+
+						case "FromBufferInterval": // Вкладка 4
+							targetDays = this.FindName("DaysInterval") as TextBox;
+							targetHours = this.FindName("HoursInterval") as TextBox;
+							targetMinutes = this.FindName("MinutesInterval") as TextBox;
+							targetSeconds = this.FindName("SecondsInterval") as TextBox;
+							break;
+
+						case "FromBufferDiv": // Вкладка 5
+							targetDays = this.FindName("DaysDiv") as TextBox;
+							targetHours = this.FindName("HoursDiv") as TextBox;
+							targetMinutes = this.FindName("MinutesDiv") as TextBox;
+							targetSeconds = this.FindName("SecondsDiv") as TextBox;
+							break;
+					}
+
+					// Если группа полей успешно определена — заполняем их данными
+					if (targetDays != null && targetHours != null && targetMinutes != null && targetSeconds != null)
+					{
+						// Если значение больше 0 — выводим цифру, иначе возвращаем исходную маску-подсказку
+						targetDays.Text = days > 0 ? days.ToString() : "д";
+						targetHours.Text = hours > 0 ? hours.ToString() : "ч";
+						targetMinutes.Text = minutes > 0 ? minutes.ToString() : "мин";
+						targetSeconds.Text = seconds > 0 ? seconds.ToString() : "с";
+
+						// 6. Переносим фокус ввода на текстовое поле СЕКУНД текущей вкладки и выделяем текст
+						targetSeconds.Focus();
+						targetSeconds.SelectAll();
+					}
+				}
+			}
+			catch (System.Runtime.InteropServices.ExternalException)
+			{
+				// Исключаем падение программы при кратковременной блокировке буфера обмена операционной системой Windows
 			}
 		}
 
@@ -417,10 +505,10 @@ namespace TC
 			}
 
 			// Принудительно ставим курсор в поле ввода Дней и выделяем текст внутри
-			if (InputIntervalDays != null)
+			if (DaysInterval != null)
 			{
-				InputIntervalDays.Focus();
-				InputIntervalDays.SelectAll();
+				DaysInterval.Focus();
+				DaysInterval.SelectAll();
 			}
 		}
 
@@ -454,10 +542,10 @@ namespace TC
 		{
 			currentTotalSeconds = 0;
 			UpdateIntervalResultText();
-			if (InputIntervalDays != null) InputIntervalDays.Text = "д";
-			if (InputIntervalHours != null) InputIntervalHours.Text = "ч";
-			if (InputIntervalMinutes != null) InputIntervalMinutes.Text = "мин";
-			if (InputIntervalSeconds != null) InputIntervalSeconds.Text = "с";
+			if (DaysInterval != null) DaysInterval.Text = "д";
+			if (HoursInterval != null) HoursInterval.Text = "ч";
+			if (MinutesInterval != null) MinutesInterval.Text = "мин";
+			if (SecondsInterval != null) SecondsInterval.Text = "с";
 
 
 			ResetFocusToDays();
@@ -607,13 +695,13 @@ namespace TC
 		// ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ СЧЕТА И ФОКУСА
 		private long GetInputIntervalInSeconds()
 		{
-			if (InputIntervalDays == null || InputIntervalHours == null ||
-				InputIntervalMinutes == null || InputIntervalSeconds == null) return 0;
+			if (DaysInterval == null || HoursInterval == null ||
+				MinutesInterval == null || SecondsInterval == null) return 0;
 
-			long.TryParse(InputIntervalDays.Text, out long d);
-			long.TryParse(InputIntervalHours.Text, out long h);
-			long.TryParse(InputIntervalMinutes.Text, out long m);
-			long.TryParse(InputIntervalSeconds.Text, out long s);
+			long.TryParse(DaysInterval.Text, out long d);
+			long.TryParse(HoursInterval.Text, out long h);
+			long.TryParse(MinutesInterval.Text, out long m);
+			long.TryParse(SecondsInterval.Text, out long s);
 
 			return s + (m * 60) + (h * 3600) + (d * 86400);
 		}
@@ -638,10 +726,10 @@ namespace TC
 
 		private void ResetFocusToDays()
 		{
-			if (InputIntervalDays != null)
+			if (DaysInterval != null)
 			{
-				InputIntervalDays.Focus();
-				InputIntervalDays.SelectAll();
+				DaysInterval.Focus();
+				DaysInterval.SelectAll();
 			}
 		}
 
@@ -905,20 +993,20 @@ namespace TC
 			StartTime.Text = AddResultTime.Text;
 
 			// 3. Сбрасываем поля ввода интервалов в исходные подсказки (д, ч, мин, с)
-			if (AddIntervalDays != null) AddIntervalDays.Text = "д";
-			if (AddIntervalHours != null) AddIntervalHours.Text = "ч";
-			if (AddIntervalMinutes != null) AddIntervalMinutes.Text = "мин";
-			if (AddIntervalSeconds != null) AddIntervalSeconds.Text = "с";
+			if (DaysAdd != null) DaysAdd.Text = "д";
+			if (HoursAdd != null) HoursAdd.Text = "ч";
+			if (MinutesAdd != null) MinutesAdd.Text = "мин";
+			if (SecondsAdd != null) SecondsAdd.Text = "с";
 
 			// 4. Очищаем нижние поля результата, так как они стали начальными данными
 			AddResultDate.SelectedDate = null;
 			AddResultTime.Text = "00:00:00";
 
 			// 5. Возвращаем фокус на поле ввода дней, чтобы можно было сразу вводить новый интервал
-			if (AddIntervalDays != null)
+			if (DaysAdd != null)
 			{
-				AddIntervalDays.Focus();
-				AddIntervalDays.SelectAll();
+				DaysAdd.Focus();
+				DaysAdd.SelectAll();
 			}
 		}
 
@@ -930,10 +1018,10 @@ namespace TC
 			if (StartTime != null) StartTime.Text = "Время";
 
 			// 2. Сбрасываем числовые поля ввода интервалов в дефолтные маски
-			if (AddIntervalDays != null) AddIntervalDays.Text = "д";
-			if (AddIntervalHours != null) AddIntervalHours.Text = "ч";
-			if (AddIntervalMinutes != null) AddIntervalMinutes.Text = "мин";
-			if (AddIntervalSeconds != null) AddIntervalSeconds.Text = "с";
+			if (DaysAdd != null) DaysAdd.Text = "д";
+			if (HoursAdd != null) HoursAdd.Text = "ч";
+			if (MinutesAdd != null) MinutesAdd.Text = "мин";
+			if (SecondsAdd != null) SecondsAdd.Text = "с";
 
 			// 3. Полностью очищаем нижние поля вывода результатов
 			if (AddResultDate != null) AddResultDate.SelectedDate = null;
@@ -967,10 +1055,10 @@ namespace TC
 			DateTime targetDateTime = baseDate.Add(baseTime);
 
 			// 3. Безопасно парсим введенные интервалы (если в поле осталась подсказка буквами — запишется 0)
-			double.TryParse(AddIntervalDays.Text, out double d);
-			double.TryParse(AddIntervalHours.Text, out double h);
-			double.TryParse(AddIntervalMinutes.Text, out double m);
-			double.TryParse(AddIntervalSeconds.Text, out double s);
+			double.TryParse(DaysAdd.Text, out double d);
+			double.TryParse(HoursAdd.Text, out double h);
+			double.TryParse(MinutesAdd.Text, out double m);
+			double.TryParse(SecondsAdd.Text, out double s);
 
 			// Если идет вычитание, инвертируем знаки всех введенных чисел
 			if (!isAddition)
@@ -1022,7 +1110,7 @@ namespace TC
 		// Кнопка ВСТАВИТЬ РЕЗУЛЬТАТ
 		private void DivIntervalPaste_Click(object sender, RoutedEventArgs e)
 		{
-			if (DivIntervalDays == null || DivResult == null) return;
+			if (DaysDiv == null || DivResult == null) return;
 
 			long tempSeconds = divTotalSeconds;
 
@@ -1036,10 +1124,10 @@ namespace TC
 			long seconds = tempSeconds % 60;
 
 			// Раскладываем секунды обратно по полям ввода
-			DivIntervalDays.Text = days > 0 ? days.ToString() : "д";
-			DivIntervalHours.Text = hours > 0 ? hours.ToString() : "ч";
-			DivIntervalMinutes.Text = minutes > 0 ? minutes.ToString() : "мин";
-			DivIntervalSeconds.Text = seconds > 0 ? seconds.ToString() : "с";
+			DaysDiv.Text = days > 0 ? days.ToString() : "д";
+			HoursDiv.Text = hours > 0 ? hours.ToString() : "ч";
+			MinutesDiv.Text = minutes > 0 ? minutes.ToString() : "мин";
+			SecondsDiv.Text = seconds > 0 ? seconds.ToString() : "с";
 
 			// Возвращаем делитель/множитель в состояние "1"
 			if (DivInputNumber != null) DivInputNumber.Text = "1";
@@ -1058,29 +1146,29 @@ namespace TC
 			divTotalSeconds = 0;
 
 			if (DivResult != null) DivResult.Text = "0 д 0 ч 0 мин 0 с";
-			if (DivIntervalDays != null) DivIntervalDays.Text = "д";
-			if (DivIntervalHours != null) DivIntervalHours.Text = "ч";
-			if (DivIntervalMinutes != null) DivIntervalMinutes.Text = "мин";
-			if (DivIntervalSeconds != null) DivIntervalSeconds.Text = "с";
+			if (DaysDiv != null) DaysDiv.Text = "д";
+			if (HoursDiv != null) HoursDiv.Text = "ч";
+			if (MinutesDiv != null) MinutesDiv.Text = "мин";
+			if (SecondsDiv != null) SecondsDiv.Text = "с";
 			if (DivInputNumber != null) DivInputNumber.Text = "1";
 
-			if (DivIntervalDays != null)
+			if (DaysDiv != null)
 			{
-				DivIntervalDays.Focus();
-				DivIntervalDays.SelectAll();
+				DaysDiv.Focus();
+				DaysDiv.SelectAll();
 			}
 		}
 
 		// Единый метод вычисления для Вкладки 5
 		private void ExecuteIntervalMath(bool isMultiplication)
 		{
-			if (DivIntervalDays == null || DivInputNumber == null || DivResult == null) return;
+			if (DaysDiv == null || DivInputNumber == null || DivResult == null) return;
 
 			// Парсим исходный временной интервал
-			long.TryParse(DivIntervalDays.Text, out long d);
-			long.TryParse(DivIntervalHours.Text, out long h);
-			long.TryParse(DivIntervalMinutes.Text, out long m);
-			long.TryParse(DivIntervalSeconds.Text, out long s);
+			long.TryParse(DaysDiv.Text, out long d);
+			long.TryParse(HoursDiv.Text, out long h);
+			long.TryParse(MinutesDiv.Text, out long m);
+			long.TryParse(SecondsDiv.Text, out long s);
 
 			long inputSeconds = s + (m * 60) + (h * 3600) + (d * 86400);
 

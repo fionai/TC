@@ -24,7 +24,7 @@
         Background="#F3F3F3" FontFamily="Segoe UI">
 
 	<Window.Resources>
-		<!-- 1. Стиль для кнопки Очистить (Набор 2) -->
+		<!-- 1. Стиль для кнопки Очистить -->
 		<Style x:Key="AddIntervalButtonStyle" TargetType="Button">
 			<Setter Property="FontSize" Value="14"/>
 			<Setter Property="Cursor" Value="Hand"/>
@@ -47,7 +47,7 @@
 			</Setter>
 		</Style>
 
-		<!-- 2. Математический стиль для кнопок + и - (Набор 2) -->
+		<!-- 2. Математический стиль для кнопок + и - -->
 		<Style x:Key="AddMathButtonStyle" TargetType="Button" BasedOn="{StaticResource AddIntervalButtonStyle}">
 			<Setter Property="IsTabStop" Value="True"/>
 			<Setter Property="Template">
@@ -73,7 +73,7 @@
 			</Setter>
 		</Style>
 
-		<!-- 3. Стиль кнопки копирования (Набор 2) -->
+		<!-- 3. Стиль кнопки копирования  -->
 		<Style x:Key="AddIconButtonStyle" TargetType="Button">
 			<Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
 			<Setter Property="Content" Value="&#xE8C8;"/>
@@ -360,7 +360,7 @@
 					</Grid>
 				</TabItem>
 
-				<!-- Вкладка 2: Добавить -->
+				<!-- Вкладка 2: Добавить======================================================================================= -->
 				<TabItem Background="#F3EFE9">
 					<Grid Background="#F3EFE9">
 						<Border Background="#8DBBB4" CornerRadius="8" Padding="15" Margin="1">
@@ -383,18 +383,45 @@
 										<RowDefinition Height="Auto"/>
 									</Grid.RowDefinitions>
 
-									<!-- Заголовок страницы -->
-									<TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Text="Добавить и вычесть интервал" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20" Foreground="#3B5753"/>
+									<!-- Верхняя строка 0 -->
+									<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Margin="0,0,0,20">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="0.22*"/>
+											<ColumnDefinition Width="0.04*"/>
+											<ColumnDefinition Width="0.22*"/>
+											<ColumnDefinition Width="0.04*"/>
+											<ColumnDefinition Width="0.22*"/>
+											<ColumnDefinition Width="0.04*"/>
+											<ColumnDefinition Width="0.22*"/>
+										</Grid.ColumnDefinitions>
+
+										<!-- Заголовок страницы  -->
+										<TextBlock Grid.Column="0" Grid.ColumnSpan="5" 
+												Text="Добавить и вычесть интервал" 
+												FontSize="20" FontWeight="SemiBold" 
+												Foreground="#3B5753" 
+												VerticalAlignment="Center"/>
+
+										<!-- Кнопка "Из буфера"  -->
+										<Button Grid.Column="6" 
+												x:Name="FromBufferAdd" 
+												Content="Из буфера" 
+												Style="{StaticResource AddIntervalButtonStyle}" 
+												Click="FromBuffer4_Click" 
+												Height="45"
+												HorizontalAlignment="Stretch" 
+												VerticalAlignment="Center"/>
+									</Grid>
 
 									<!-- Строка 1: Дата и Время -->
 									<DatePicker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" x:Name="StartDate" Margin="0,0,0,15" SelectedDateChanged="CalculateDateDifference" HorizontalAlignment="Stretch" FontSize="20" Loaded="StartDatePicker_Loaded" TabIndex="1" Background="#F3EFE9" BorderBrush="#56413C" Foreground="#3B5753"/>
 									<TextBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" x:Name="StartTime" Margin="0,0,0,15" Text="Время" TextChanged="TimeTextBox_TextChanged" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="20" TabIndex="2" Background="#F3EFE9" BorderBrush="#56413C" Foreground="#3B5753" Padding="5,2" GotFocus="TimeTextBox_GotFocus" LostFocus="TimeTextBox_LostFocus" PreviewTextInput="TimeTextBox_PreviewTextInput" PreviewKeyDown="TimeTextBox_PreviewKeyDown" MouseDoubleClick="TimeTextBox_MouseDoubleClick" PreviewMouseLeftButtonDown="TimeTextBox_PreviewMouseLeftButtonDown"/>
 
 									<!-- Строка 2: Числовые поля (Дни, Часы, Минуты, Секунды) -->
-									<TextBox Grid.Row="2" Grid.Column="0" x:Name="AddIntervalDays" Text="д" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="3" Background="#E3DDD3" BorderBrush="#56413C" Foreground="#3B5753" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-									<TextBox Grid.Row="2" Grid.Column="2" x:Name="AddIntervalHours" Text="ч" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="4" Background="#E3DDD3" BorderBrush="#56413C" Foreground="#3B5753" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-									<TextBox Grid.Row="2" Grid.Column="4" x:Name="AddIntervalMinutes" Text="мин" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="5" Background="#E3DDD3" BorderBrush="#56413C" Foreground="#3B5753" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-									<TextBox Grid.Row="2" Grid.Column="6" x:Name="AddIntervalSeconds" Text="с" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="6" Background="#E3DDD3" BorderBrush="#56413C" Foreground="#3B5753" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="2" Grid.Column="0" x:Name="DaysAdd" Text="д" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="3" Background="#E3DDD3" BorderBrush="#56413C" Foreground="#3B5753" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="2" Grid.Column="2" x:Name="HoursAdd" Text="ч" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="4" Background="#E3DDD3" BorderBrush="#56413C" Foreground="#3B5753" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="2" Grid.Column="4" x:Name="MinutesAdd" Text="мин" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="5" Background="#E3DDD3" BorderBrush="#56413C" Foreground="#3B5753" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="2" Grid.Column="6" x:Name="SecondsAdd" Text="с" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="6" Background="#E3DDD3" BorderBrush="#56413C" Foreground="#3B5753" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
 									<!-- Строка 3: Математические кнопки и Очистить -->
 									<Button Grid.Row="3" Grid.Column="0" Margin="0,25,0,0" x:Name="AddIntervalPlus" Content="+" Style="{StaticResource AddMathButtonStyle}" Click="AddIntervalAdd_Click" TabIndex="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
@@ -706,17 +733,44 @@
 									</Grid.Resources>
 
 
-									<!-- Заголовок -->
-									<TextBlock Grid.Row="0" Grid.ColumnSpan="8" Text="Сумма/разность интервалов" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20" Foreground="#7A5123"/>
+									<!-- Строка 0 -->
+									<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Margin="0,0,0,20">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="0.22*"/>
+											<ColumnDefinition Width="0.04*"/>
+											<ColumnDefinition Width="0.22*"/>
+											<ColumnDefinition Width="0.04*"/>
+											<ColumnDefinition Width="0.22*"/>
+											<ColumnDefinition Width="0.04*"/>
+											<ColumnDefinition Width="0.22*"/>
+										</Grid.ColumnDefinitions>
+
+										<!-- Заголовок страницы -->
+										<TextBlock Grid.Column="0" Grid.ColumnSpan="5" 
+												Text="Сумма/разность интервалов" 
+												FontSize="20" FontWeight="SemiBold" 
+												Foreground="#7A5123" 
+												VerticalAlignment="Center"/>
+
+										<!-- Кнопка "Из буфера" (В стиле Набора 4, строго над кнопкой Очистить) -->
+										<Button Grid.Column="6" 
+												x:Name="FromBufferInterval" 
+												Content="Из буфера" 
+												Style="{StaticResource IntervalButtonStyle}" 
+												Click="FromBuffer4_Click" 
+												Height="45"
+												HorizontalAlignment="Stretch" 
+												VerticalAlignment="Center"/>
+									</Grid>
 
 									<!-- СТРОКА 1: ПОЛЯ ВВОДА -->
-									<TextBox Grid.Row="1" Grid.Column="0" x:Name="InputIntervalDays" Text="д" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="1" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="1" Grid.Column="0" x:Name="DaysInterval" Text="д" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="1" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
-									<TextBox Grid.Row="1" Grid.Column="2" x:Name="InputIntervalHours" Text="ч" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="2" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="1" Grid.Column="2" x:Name="HoursInterval" Text="ч" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="2" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
-									<TextBox Grid.Row="1" Grid.Column="4" x:Name="InputIntervalMinutes" Text="мин" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="3" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="1" Grid.Column="4" x:Name="MinutesInterval" Text="мин" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="3" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
-									<TextBox Grid.Row="1" Grid.Column="6" x:Name="InputIntervalSeconds" Text="с" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="4" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="1" Grid.Column="6" x:Name="SecondsInterval" Text="с" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="4" Background="#E3DDD3" BorderBrush="#4B5A65" Foreground="#7A5123" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
 								
 									<!-- СТРОКА 2: Кнопки -->
@@ -871,14 +925,41 @@
 										</Style>
 									</Grid.Resources>
 
-									<!-- Заголовок страницы -->
-									<TextBlock Grid.Row="0" Grid.ColumnSpan="8" Text="Умножение и деление интервалов" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,20" Foreground="#6E2B27"/>
+									<!-- Строка 0 -->
+									<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Margin="0,0,0,20">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="0.22*"/>
+											<ColumnDefinition Width="0.04*"/>
+											<ColumnDefinition Width="0.22*"/>
+											<ColumnDefinition Width="0.04*"/>
+											<ColumnDefinition Width="0.22*"/>
+											<ColumnDefinition Width="0.04*"/>
+											<ColumnDefinition Width="0.22*"/>
+										</Grid.ColumnDefinitions>
+
+										<!-- Заголовок страницы -->
+										<TextBlock Grid.Column="0" Grid.ColumnSpan="5" 
+												Text="Умножение и деление интервалов" 
+												FontSize="20" FontWeight="SemiBold" 
+												Foreground="#6E2B27" 
+												VerticalAlignment="Center"/>
+
+										<!-- Кнопка "Из буфера" -->
+										<Button Grid.Column="6" 
+												x:Name="FromBufferDiv" 
+												Content="Из буфера" 
+												Style="{StaticResource DivIntervalButtonStyle}" 
+												Click="FromBuffer4_Click" 
+												Height="45"
+												HorizontalAlignment="Stretch" 
+												VerticalAlignment="Center"/>
+									</Grid>
 
 									<!-- СТРОКА 1: ПОЛЯ ВВОДА ИНТЕРВАЛОВ -->
-									<TextBox Grid.Row="1" Grid.Column="0" x:Name="DivIntervalDays" Text="д" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="1" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-									<TextBox Grid.Row="1" Grid.Column="2" x:Name="DivIntervalHours" Text="ч" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="2" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-									<TextBox Grid.Row="1" Grid.Column="4" x:Name="DivIntervalMinutes" Text="мин" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="3" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
-									<TextBox Grid.Row="1" Grid.Column="6" x:Name="DivIntervalSeconds" Text="с" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="4" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="1" Grid.Column="0" x:Name="DaysDiv" Text="д" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="1" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="1" Grid.Column="2" x:Name="HoursDiv" Text="ч" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="2" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="1" Grid.Column="4" x:Name="MinutesDiv" Text="мин" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="3" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
+									<TextBox Grid.Row="1" Grid.Column="6" x:Name="SecondsDiv" Text="с" FontSize="20" Height="45" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TabIndex="4" Background="#E3DDD3" BorderBrush="#3D5452" Foreground="#6E2B27" GotFocus="IntervalTextBox_GotFocus" LostFocus="IntervalTextBox_LostFocus" PreviewTextInput="InputValue_PreviewTextInput" PreviewKeyDown="InputValue_PreviewKeyDown"/>
 
 									<!-- СТРОКА 2: ПОЛЕ ДЛЯ ВВОДА ЧИСЛА -->
 									<TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Text="Множитель / делитель (число):" FontSize="16" FontWeight="SemiBold" Foreground="#6E2B27" VerticalAlignment="Center" Margin="0,15,0,10"/>
